@@ -11,7 +11,7 @@ public interface IParticipantService
 
 public class ParticipantService : IParticipantService
 {
-    private readonly ApplicationDbContext _ctx;
+    private readonly AppDbContext _ctx;
 
     private int AddOrGetRaceId()
     {
@@ -24,7 +24,7 @@ public class ParticipantService : IParticipantService
         return newRace.Id;
     }
     
-    public ParticipantService(ApplicationDbContext ctx)
+    public ParticipantService(AppDbContext ctx)
     {
         _ctx = ctx;
     }

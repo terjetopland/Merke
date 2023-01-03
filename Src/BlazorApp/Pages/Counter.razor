@@ -1,0 +1,41 @@
+﻿@page "/counter"
+@using BlazorApp.Services
+@inject IParticipantService ParticipantService
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="AddName">Register new name</button>
+
+
+<input @bind="name"/>
+<div class="@((!IsNameValid() && name.Length >0) ? "d-block": "d-none")" > To short name!</div>
+<div>@name</div>
+
+@code {
+    private int currentCount = 0;
+
+    private void AddName()
+    {
+        if (!IsNameValid()) return;
+        
+        ParticipantService.Add(name);
+        name = String.Empty;
+    }
+    
+    private bool IsNameValid()
+    {
+        return name.Length >= 2;
+    }
+    
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    string name = String.Empty;
+}
+

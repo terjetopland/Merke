@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230103220036_StartTimeRace")]
-    partial class StartTimeRace
+    [Migration("20230103230354_AddedEndTimeParticipant")]
+    partial class AddedEndTimeParticipant
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,9 @@ namespace BlazorApp.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()

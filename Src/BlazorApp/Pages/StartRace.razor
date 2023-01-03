@@ -1,0 +1,17 @@
+@page "/StartRace"
+@using BlazorApp.Services
+@inject IRaceService RaceService
+
+<button @onclick="Start" class="btn btn-primary">Start Race</button>
+<h3>StartRace</h3>
+
+
+@code {
+    
+    private void Start()
+    {
+        var race = RaceService.GetRace();
+        RaceService.Start(race.Id);
+
+    }
+}

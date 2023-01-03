@@ -7,6 +7,8 @@ public interface IParticipantService
 {
     void Add(string name);
     string GetAll();
+    void SetEndTime(int raceId, int participantId);
+    List<Participant> GetParticipants(int raceId);
 }
 
 public class ParticipantService : IParticipantService
@@ -42,5 +44,22 @@ public class ParticipantService : IParticipantService
     public string GetAll()
     {
         throw new NotImplementedException();
+    }
+
+    public void SetEndTime(int raceId, int participantId)
+    {
+        var participant = _ctx.Participants.FirstOrDefault(p => p.Id == participantId && p.RaceId == raceId);
+
+        if (participant is not null)
+        {
+            participant.EndTime = DateTime.UtcNow;
+        }
+    }
+
+    public List<Participant> GetParticipants(int raceId)
+    {
+        var participants = _ctx.Participants.Where(p => p.RaceId == raceId).ToList();
+
+        return participants;
     }
 }

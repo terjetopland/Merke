@@ -1,0 +1,39 @@
+@page "/EndRace"
+@using BlazorApp.Services
+@using BlazorApp.Models
+@inject IParticipantService Service
+@inject IRaceService RaceService
+
+
+
+<h3>Participants</h3>
+
+
+
+<table>
+    <tbody>
+    @foreach (Participant participant in Participants)
+    {
+        <tr>
+            <td>@participant.Name</td>
+            <td><button class="btn btn-primary">Stop</button></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+
+@code {
+    private List<Participant> Participants;
+
+    protected override void OnInitialized()
+    {
+        var race = RaceService.GetRace();
+        Participants = Service.GetParticipants(race.Id);
+    }
+    
+    
+
+
+}

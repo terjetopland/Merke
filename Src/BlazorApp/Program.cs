@@ -20,11 +20,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+// Dependency injection
 builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
-// Dependency injection
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
+builder.Services.AddScoped<IRaceService, RaceService>();
 
 var app = builder.Build();
 

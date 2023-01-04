@@ -294,3 +294,6 @@ __pycache__/
 *.dtmp
 
 *.db
+*.db-shm
+*.db-wal
+

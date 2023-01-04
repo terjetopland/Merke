@@ -1,5 +1,7 @@
 using BlazorApp.Data;
+using BlazorApp.Dtos;
 using BlazorApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Services;
 
@@ -8,7 +10,7 @@ public interface IParticipantService
     void Add(string name);
     string GetAll();
     void SetEndTime(int raceId, int participantId);
-    List<Participant> GetParticipants(int raceId);
+    List<ParticipantDto> GetParticipants(int raceId);
 }
 
 public class ParticipantService : IParticipantService
@@ -50,18 +52,36 @@ public class ParticipantService : IParticipantService
     {
         var participant = _ctx.Participants.FirstOrDefault(p => p.Id == participantId && p.RaceId == raceId);
 
-        if (participant is not null)
+        if (participant is not null && participant.EndTime is null)
         {
             participant.EndTime = DateTime.UtcNow;
             _ctx.SaveChanges();
         }
     }
 
-    public List<Participant> GetParticipants(int raceId)
+    public List<ParticipantDto> GetParticipants(int raceId)
     {
-        var participants = _ctx.Participants.Where(p => p.RaceId == raceId).ToList();
+        //var participants = _ctx.Participants.Where(p => p.RaceId == raceId).ToList();
+        //var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
 
-        return participants;
+        var race =
+            _ctx.Races
+                .Include(r => r.Participants)
+                .FirstOrDefault(r => r.Id == raceId);
+
+        var participantsDto = new List<ParticipantDto>();
+        foreach (Participant participant in race.Participants)
+        {
+            participantsDto.Add(new ParticipantDto
+            {
+                Id = participant.Id,
+                RaceId = participant.RaceId,
+                EndTime = participant.EndTime,
+                Name = participant.Name,
+                Result = participant.EndTime - race.StartTime 
+            });
+        }
+        return participantsDto;
         
     }
 }

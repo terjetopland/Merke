@@ -1,6 +1,7 @@
 @page "/EndRace"
 @using BlazorApp.Services
 @using BlazorApp.Models
+@using BlazorApp.Dtos
 @inject IParticipantService Service
 @inject IRaceService RaceService
 
@@ -16,6 +17,7 @@
         <tr @onclick="() => EndTime(participant)">
             <td>@participant.Id</td>
             <td>@participant.Name</td>
+            <td>@participant.Result</td>
             <td><button class="btn btn-primary">Stop</button></td>
         </tr>
     }
@@ -26,7 +28,7 @@
 
 
 @code {
-    private List<Participant> Participants;
+    private List<ParticipantDto> Participants;
 
     protected override void OnInitialized()
     {
@@ -35,7 +37,7 @@
     }
 
 
-    private void EndTime(Participant participant)
+    private void EndTime(ParticipantDto participant)
     {
         Service.SetEndTime(participant.Id, participant.RaceId);
     }

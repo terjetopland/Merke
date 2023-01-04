@@ -9,6 +9,7 @@ public interface IRaceService
 {
     void Start(int raceId);
     Race GetRace();
+    void AddRace(string name);
 }
 public class RaceService : IRaceService
 {
@@ -47,5 +48,12 @@ public class RaceService : IRaceService
         return newRace;
         
 
+    }
+
+    public void AddRace(string name)
+    {
+        var newRace = new Race{Name = name};
+        _ctx.Add(newRace);
+        _ctx.SaveChanges();
     }
 }

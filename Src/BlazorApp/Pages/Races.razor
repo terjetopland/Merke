@@ -1,4 +1,4 @@
-@page "/ResultHistory"
+@page "/Races"
 @using BlazorApp.Services
 @using BlazorApp.Models
 @using BlazorApp.Dtos
@@ -6,6 +6,9 @@
 @inject IRaceService RaceService
 
 <h3>Races</h3>
+<button class="btn btn-primary" @onclick="AddRace">Register new race</button>
+<input @bind="_name"/>
+
 
 <table>
     <tbody>
@@ -25,6 +28,7 @@
 
 @code {
     private List<ParticipantDto> Participants;
+    private string _name = String.Empty;
 
     protected override void OnInitialized()
     {
@@ -36,6 +40,11 @@
     private void EndTime(ParticipantDto participant)
     {
         Service.SetEndTime(participant.Id, participant.RaceId);
+    }
+
+    private void AddRace()
+    {
+       RaceService.AddRace(_name); 
     }
 
 }

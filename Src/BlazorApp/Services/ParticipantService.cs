@@ -62,5 +62,6 @@ public class ParticipantService : IParticipantService
         var participants = _ctx.Participants.Where(p => p.RaceId == raceId).ToList();
 
         return participants;
+        
     }
 }

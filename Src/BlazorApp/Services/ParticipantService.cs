@@ -53,6 +53,7 @@ public class ParticipantService : IParticipantService
         if (participant is not null)
         {
             participant.EndTime = DateTime.UtcNow;
+            _ctx.SaveChanges();
         }
     }
 

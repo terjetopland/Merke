@@ -12,9 +12,10 @@
 
 <table>
     <tbody>
-    @foreach (Participant participant in Participants)
+    @foreach (var participant in Participants)
     {
-        <tr>
+        <tr @onclick="() => EndTime(participant)">
+            <td>@participant.Id</td>
             <td>@participant.Name</td>
             <td><button class="btn btn-primary">Stop</button></td>
         </tr>
@@ -32,8 +33,11 @@
         var race = RaceService.GetRace();
         Participants = Service.GetParticipants(race.Id);
     }
-    
-    
 
+
+    private void EndTime(Participant participant)
+    {
+        Service.SetEndTime(participant.Id, participant.RaceId);
+    }
 
 }

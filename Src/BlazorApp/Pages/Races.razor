@@ -1,0 +1,41 @@
+@page "/ResultHistory"
+@using BlazorApp.Services
+@using BlazorApp.Models
+@using BlazorApp.Dtos
+@inject IParticipantService Service
+@inject IRaceService RaceService
+
+<h3>Races</h3>
+
+<table>
+    <tbody>
+    @foreach (var participant in Participants)
+    {
+        <tr>
+            <td>@participant.Id</td>
+            <td>@participant.Name</td>
+            <td>@participant.Result</td>
+        </tr>
+    }
+    
+    </tbody>
+</table>
+
+
+
+@code {
+    private List<ParticipantDto> Participants;
+
+    protected override void OnInitialized()
+    {
+        var race = RaceService.GetRace();
+        Participants = Service.GetParticipants(race.Id);
+    }
+
+
+    private void EndTime(ParticipantDto participant)
+    {
+        Service.SetEndTime(participant.Id, participant.RaceId);
+    }
+
+}

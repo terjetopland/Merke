@@ -9,10 +9,21 @@
 <button class="btn btn-primary" @onclick="AddRace">Register new race</button>
 <input @bind="_name"/>
 
+<ol>
+    @{
+        foreach (var race in _races)
+        {
+            <li>
+                @race.Name
+            </li>
+        }
+        
+    }
+</ol>
 
 <table>
     <tbody>
-    @foreach (var participant in Participants)
+    @foreach (var participant in _participants)
     {
         <tr>
             <td>@participant.Id</td>
@@ -27,13 +38,15 @@
 
 
 @code {
-    private List<ParticipantDto> Participants;
+    private List<ParticipantDto> _participants = new List<ParticipantDto>();
+    private List<Race> _races = new List<Race>();
     private string _name = String.Empty;
 
     protected override void OnInitialized()
     {
+        _races = RaceService.GetRaces();
         var race = RaceService.GetRace();
-        Participants = Service.GetParticipants(race.Id);
+        _participants = Service.GetParticipants(race.Id);
     }
 
 
@@ -46,5 +59,7 @@
     {
        RaceService.AddRace(_name); 
     }
+    
+    
 
 }

@@ -70,6 +70,7 @@ public class ParticipantService : IParticipantService
                 .FirstOrDefault(r => r.Id == raceId);
 
         var participantsDto = new List<ParticipantDto>();
+
         foreach (Participant participant in race.Participants)
         {
             participantsDto.Add(new ParticipantDto
@@ -81,6 +82,12 @@ public class ParticipantService : IParticipantService
                 Result = participant.EndTime - race.StartTime 
             });
         }
+        participantsDto.Sort((participant1, participant2)=>
+            TimeSpan.Compare(
+                participant1.Result ?? new TimeSpan(0),
+                participant2.Result ?? new TimeSpan(0)));
+
+      
         return participantsDto;
         
     }

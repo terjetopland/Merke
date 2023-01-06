@@ -7,7 +7,7 @@ namespace BlazorApp.Services;
 
 public interface IParticipantService
 {
-    void Add(string name);
+    void AddParticipant(string name);
     string GetAll();
     void SetEndTime(int raceId, int participantId);
     List<ParticipantDto> GetParticipants(int raceId);
@@ -27,12 +27,14 @@ public class ParticipantService : IParticipantService
         _ctx.SaveChanges();
         return newRace.Id;
     }
+
+    
     
     public ParticipantService(AppDbContext ctx)
     {
         _ctx = ctx;
     }
-    public void Add(string name)
+    public void AddParticipant(string name)
     {
         var participant = new Participant
         {

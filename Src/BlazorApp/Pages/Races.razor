@@ -9,17 +9,20 @@
 <button class="btn btn-primary" @onclick="AddRace">Register new race</button>
 <input @bind="_name"/>
 
-<ol>
+<table>
     @{
         foreach (var race in _races)
         {
-            <li>
-                @race.Name
-            </li>
+            <tr>
+                <td>@race.Id</td>
+                <td>@race.Name</td>
+                <td>@race.StartTime</td>
+                <td><button class="btn btn-primary">Show result</button></td>
+            </tr>
         }
         
     }
-</ol>
+</table>
 
 <hr/>
 
@@ -47,19 +50,18 @@
     protected override void OnInitialized()
     {
         _races = RaceService.GetRaces();
-        var race = RaceService.GetRace();
-        _participants = Service.GetParticipants(race.Id);
-    }
-
-
-    private void EndTime(ParticipantDto participant)
-    {
-        Service.SetEndTime(participant.Id, participant.RaceId);
+        //var race = RaceService.GetRace();
+        //_participants = Service.GetParticipants(race.Id);
     }
 
     private void AddRace()
     {
        RaceService.AddRace(_name); 
+    }
+
+    private void ShowResult()
+    {
+        
     }
     
     

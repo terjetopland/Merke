@@ -44,6 +44,7 @@ public class RaceService : IRaceService
         }
 
         var newRace = new Race();
+        //should this be added to db?
         _ctx.Races.Add(newRace);
         _ctx.SaveChanges();
 

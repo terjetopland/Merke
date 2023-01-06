@@ -1,12 +1,11 @@
-﻿@page "/counter"
+﻿@page "/registerparticipant"
 @using BlazorApp.Services
 @inject IParticipantService ParticipantService
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Register Participant</PageTitle>
+<h1>Register Participant</h1>
 
-<h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
+<div>Please enter a new participant below or choose from the list.</div>
 
 <button class="btn btn-primary" @onclick="AddName">Register new name</button>
 
@@ -16,7 +15,6 @@
 <div>@name</div>
 
 @code {
-    private int currentCount = 0;
 
     private void AddName()
     {
@@ -29,11 +27,6 @@
     private bool IsNameValid()
     {
         return name.Length >= 2;
-    }
-    
-    private void IncrementCount()
-    {
-        currentCount++;
     }
 
     string name = String.Empty;

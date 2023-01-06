@@ -10,6 +10,8 @@ public interface IRaceService
     void Start(int raceId);
     Race GetRace();
 
+    Race GetRace(int raceId);
+
     List<Race> GetRaces();
     void AddRace(string name);
 }
@@ -51,6 +53,17 @@ public class RaceService : IRaceService
         return newRace;
         
 
+    }
+
+    public Race GetRace(int raceId)
+    {
+        var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
+        if (race is not null)
+        {
+            return race;
+        }
+
+        throw new Exception("Failed to GetRace in RaceService.cs");
     }
 
     public List<Race> GetRaces()

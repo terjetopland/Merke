@@ -1,13 +1,14 @@
 using BlazorApp.Data;
 using BlazorApp.Dtos;
 using BlazorApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Services;
 
 public interface IParticipantService
 {
-    void AddParticipant(string name);
+    void AddParticipant(string userId);
     string GetAll();
     void SetEndTime(int raceId, int participantId);
     List<ParticipantDto> GetParticipants(int raceId);
@@ -16,6 +17,7 @@ public interface IParticipantService
 public class ParticipantService : IParticipantService
 {
     private readonly AppDbContext _ctx;
+    private UserManager<User> _userManager;
 
     private int AddOrGetRaceId()
     {
@@ -30,20 +32,23 @@ public class ParticipantService : IParticipantService
 
     
     
-    public ParticipantService(AppDbContext ctx)
+    public ParticipantService(AppDbContext ctx, UserManager<User> userManager)
     {
         _ctx = ctx;
+        _userManager = userManager;
     }
-    public void AddParticipant(string name)
+    public void AddParticipant(string userId)
     {
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
         var participant = new Participant
         {
-            Name = name,
+            User = user,
             RaceId = AddOrGetRaceId()
         };
         _ctx.Participants.Add(participant);
         _ctx.SaveChanges();
     }
+    
 
     public string GetAll()
     {
@@ -69,6 +74,7 @@ public class ParticipantService : IParticipantService
         var race =
             _ctx.Races
                 .Include(r => r.Participants)
+                .ThenInclude(u => u.User)
                 .FirstOrDefault(r => r.Id == raceId);
 
         var participantsDto = new List<ParticipantDto>();
@@ -80,7 +86,7 @@ public class ParticipantService : IParticipantService
                 Id = participant.Id,
                 RaceId = participant.RaceId,
                 EndTime = participant.EndTime,
-                Name = participant.Name,
+                Name = participant.User.Name,
                 Result = participant.EndTime - race.StartTime 
             });
         }

@@ -4,6 +4,7 @@
 @using BlazorApp.Dtos
 @inject IParticipantService Service
 @inject IRaceService RaceService
+@inject IUserService UserService
 
 <h3>Races</h3>
 <button class="btn btn-primary" @onclick="AddRace">Register new race</button>
@@ -20,9 +21,10 @@
                 <td><button  @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
             </tr>
         }
-        
     }
 </table>
+
+
 
 <hr/>
 
@@ -40,11 +42,25 @@
     </tbody>
 </table>
 
+<table>
+    <tbody>
+    @foreach (var user in _users)
+    {
+        <tr>
+            <td>@user.Name</td>
+            <td>@user.DateOfBirth</td>
+        </tr>
+    }
+    
+    </tbody>
+</table>
+
 
 
 @code {
     private List<ParticipantDto> _participants = new List<ParticipantDto>();
     private List<Race> _races = new List<Race>();
+    private List<User> _users = new List<User>();
     private string _name = String.Empty;
     
 
@@ -65,7 +81,11 @@
         var race = RaceService.GetRace(raceId);
         _participants = Service.GetParticipants(race.Id);
     }
-    
+
+    private void GetUsers()
+    {
+        var users = UserService.GetUsers();
+    }
     
 
 }

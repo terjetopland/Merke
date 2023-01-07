@@ -28,6 +28,7 @@ builder.Services
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
 builder.Services.AddScoped<IRaceService, RaceService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

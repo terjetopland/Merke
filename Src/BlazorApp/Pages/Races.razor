@@ -14,11 +14,13 @@
     @{
         foreach (var race in _races)
         {
+            var raceId = race.Id;
             <tr>
                 <td>@race.Id</td>
                 <td>@race.Name</td>
                 <td>@race.StartTime</td>
-                <td><button  @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
+                <td><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
+                <td><button @onclick="() => GetUsers()" class="btn btn-primary">Show all users</button></td>
             </tr>
         }
     }
@@ -49,6 +51,7 @@
         <tr>
             <td>@user.Name</td>
             <td>@user.DateOfBirth</td>
+            <td><button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add</button></td>
         </tr>
     }
     
@@ -62,7 +65,7 @@
     private List<Race> _races = new List<Race>();
     private List<AppUser> _users = new List<AppUser>();
     private string _name = String.Empty;
-    
+    private int _currentRaceId;
 
     protected override void OnInitialized()
     {
@@ -79,13 +82,18 @@
     private void ShowResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);
+        _currentRaceId = race.Id;
         _participants = Service.GetParticipants(race.Id);
     }
 
     private void GetUsers()
     {
-        var users = UserService.GetUsers();
+        _users = UserService.GetUsers();
     }
-    
+
+    private void SetParticipant(string userId)
+    {
+        Service.AddParticipant(userId, _currentRaceId);
+    }
 
 }

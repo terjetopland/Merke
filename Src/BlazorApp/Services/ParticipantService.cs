@@ -78,22 +78,26 @@ public class ParticipantService : IParticipantService
 
         var participantsDto = new List<ParticipantDto>();
 
-        foreach (Participant participant in race.Participants)
+        if (race is not null)
         {
-            participantsDto.Add(new ParticipantDto
+            foreach (Participant participant in race.Participants)
             {
-                Id = participant.Id,
-                RaceId = participant.RaceId,
-                EndTime = participant.EndTime,
-                Name = participant.User.Name,
-                Result = participant.EndTime - race.StartTime 
-            });
-        }
-        participantsDto.Sort((participant1, participant2)=>
-            TimeSpan.Compare(
-                participant1.Result ?? new TimeSpan(0),
-                participant2.Result ?? new TimeSpan(0)));
+                participantsDto.Add(new ParticipantDto
+                {
+                    Id = participant.Id,
+                    RaceId = participant.RaceId,
+                    EndTime = participant.EndTime,
+                    Name = participant.User?.Name ?? "<unknown>",
+                    Result = participant.EndTime - race.StartTime 
+                });
+            }
+            participantsDto.Sort((participant1, participant2)=>
+                TimeSpan.Compare(
+                    participant1.Result ?? new TimeSpan(0),
+                    participant2.Result ?? new TimeSpan(0)));
 
+        }
+        
       
         return participantsDto;
         

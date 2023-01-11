@@ -2,6 +2,8 @@
 @using BlazorApp.Services
 @using BlazorApp.Models
 @using BlazorApp.Dtos
+@using System.Reflection.Metadata
+@using Microsoft.AspNetCore.Razor.TagHelpers
 @inject IParticipantService Service
 @inject IRaceService RaceService
 @inject IUserService UserService
@@ -14,13 +16,11 @@
     @{
         foreach (var race in _races)
         {
-            var raceId = race.Id;
             <tr>
                 <td>@race.Id</td>
                 <td>@race.Name</td>
                 <td>@race.StartTime</td>
-                <td><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
-                <td><button @onclick="() => GetUsers()" class="btn btn-primary">Show all users</button></td>
+                <td><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary" >Show result</button></td>
             </tr>
         }
     }
@@ -30,37 +30,58 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <h3>Participants in race @_currentRaceId</h3>
-            <table>
-                <tbody>
-                @foreach (var participant in _participants)
+            @{
+                if (_raceSwitchOn)
                 {
-                    <tr>
-                        <td>@participant.Id</td>
-                        <td>@participant.Name</td>
-                        <td>@participant.Result</td>
-                    </tr>
-                }
+                    <h3>Participants in race @_currentRaceId</h3>
+           
+            
+                    <table class="table-bordered table-responsive">
+                        <tbody>
+                        <tr>
+                            <th>Participant id</th>
+                            <th>Full name</th>
+                            <th>Result</th>
+                        </tr>
+                        @foreach (var participant in _participants)
+                        {
+                            <tr>
+                                <td>@participant.Id</td>
+                                <td>@participant.Name</td>
+                                <td>@participant.Result</td>
+                            </tr>
+                        }
 
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                }
+            }
         </div>
+        
+        
         <div class="col-sm-6">
-            <h3>All users</h3>
-            <table>
-                <tbody>
-                @foreach (var user in _users)
+            <button @onclick="GetUsers" class="btn btn-primary">Show all users</button>
+            @{
+                if (_usersSwitchOn)
                 {
-                    <tr>
-                        <td>@user.Name</td>
-                        <td>@user.DateOfBirth</td>
-                        <td><button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add</button></td>
-                    </tr>
-                }
+                    <h3>All users</h3>
+                    <table class="table-bordered table-responsive">
+                        <tbody>
+                        @foreach (var user in _users)
+                        {
+                            <tr>
+                                <td>@user.Name</td>
+                                <td>@user.DateOfBirth</td>
+                                <td><button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add</button></td>
+                            </tr>
+                        }
 
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                }
+            }
         </div>
+       
     </div>
 </div>
 
@@ -70,6 +91,8 @@
     private List<AppUser> _users = new List<AppUser>();
     private string _name = String.Empty;
     private int _currentRaceId;
+    private bool _usersSwitchOn = false;
+    private bool _raceSwitchOn = false;
 
     protected override void OnInitialized()
     {
@@ -86,13 +109,20 @@
     private void ShowResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);
+        var previousRaceId = _currentRaceId;
         _currentRaceId = race.Id;
         _participants = Service.GetParticipants(race.Id);
+        ViewRaceHeading(previousRaceId);
     }
 
     private void GetUsers()
     {
         _users = UserService.GetUsers();
+        if (_usersSwitchOn)
+            _usersSwitchOn = false;
+        else
+            _usersSwitchOn = true;
+
     }
 
     private void SetParticipant(string userId)
@@ -100,4 +130,15 @@
         Service.AddParticipant(userId, _currentRaceId);
     }
 
+    private void ViewRaceHeading(int prevRaceId)
+    {
+        if (prevRaceId == _currentRaceId)
+        {
+            if (_raceSwitchOn)
+                _raceSwitchOn = false;
+        }
+        else
+            _raceSwitchOn = true;
+        
+    }
 }

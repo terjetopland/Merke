@@ -72,8 +72,12 @@ namespace BlazorApp.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [Display(Name = "<Full name")]
+            [Display(Name = "Full name")]
             public string Name { get; set; }
+            
+            [Required]
+            [Display(Name = "Date of birth mm.yyyy")]
+            public DateTime DateOfBirth { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -119,6 +123,9 @@ namespace BlazorApp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.Name = Input.Name;
+                user.DateOfBirth = Input.DateOfBirth;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

@@ -17,9 +17,9 @@ public interface IParticipantService
 public class ParticipantService : IParticipantService
 {
     private readonly AppDbContext _ctx;
-    private UserManager<User> _userManager;
+    private UserManager<AppUser> _userManager;
     
-    public ParticipantService(AppDbContext ctx, UserManager<User> userManager)
+    public ParticipantService(AppDbContext ctx, UserManager<AppUser> userManager)
     {
         _ctx = ctx;
         _userManager = userManager;

@@ -6,7 +6,7 @@ public class Participant
     
     public DateTime? EndTime { get; set; }
     
-    public virtual User? User { get; set; } = default!;
+    public virtual AppUser? User { get; set; } = default!;
 
     public int RaceId { get; set; }
     public virtual Race Race { get; set; } = default!;

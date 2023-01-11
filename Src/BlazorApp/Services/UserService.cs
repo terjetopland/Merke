@@ -5,7 +5,7 @@ namespace BlazorApp.Services;
 
 public interface IUserService
 {
-    public List<User> GetUsers();
+    public List<AppUser> GetUsers();
 }
 
 public class UserService :IUserService
@@ -16,7 +16,7 @@ public class UserService :IUserService
     {
         _ctx = ctx;
     }
-    public List<User> GetUsers()
+    public List<AppUser> GetUsers()
     {
         var users = _ctx.Users.ToList();
         return users;

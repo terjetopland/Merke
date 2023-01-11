@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using BlazorApp.Areas.Identity;
 using BlazorApp.Data;
+using BlazorApp.Models;
 using BlazorApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,17 +17,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 // Dependency injection
 builder.Services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
 builder.Services.AddScoped<IRaceService, RaceService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

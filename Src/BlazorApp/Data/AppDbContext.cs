@@ -17,6 +17,6 @@ public class AppDbContext : IdentityDbContext
 
     public DbSet<Race> Races => Set<Race>();
 
-    public new DbSet<AppUser> Users => Set<AppUser>();
+    public new DbSet<AppUser> AppUsers => Set<AppUser>();
 
 }

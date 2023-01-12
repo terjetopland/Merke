@@ -20,8 +20,5 @@ public class UserService :IUserService
     {
         var users = _ctx.AppUsers.ToList();
         return users;
-
-
-
-        }
+    }
 }

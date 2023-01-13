@@ -11,6 +11,7 @@ public class Race
     public string Info { get; set; } = String.Empty;
     
     public DateTime? StartTime { get; set; }
+    public DateTime? StartRace { get; set; }
     public DateTime? EndRace { get; set; }
 
     public virtual ICollection<Participant> Participants { get; set; } = new HashSet<Participant>();

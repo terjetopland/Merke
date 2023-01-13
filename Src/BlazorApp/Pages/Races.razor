@@ -34,7 +34,11 @@
                         
                         @if (race.StartRace is null)
                         {
-                            <td class="border-bottom-0 border-top-0"><button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Race started</button></td>
+                            <td class="border-bottom-0 border-top-0"><button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button></td>
+                        }
+                        @if (race.EndRace is null && race.StartRace is not null)
+                        {
+                            <td class="border-bottom-0 border-top-0"><button @onclick="() => EndRace(race.Id)" class="btn btn-primary">End Race</button></td>
                         }
                     </tr>
                 }
@@ -124,6 +128,11 @@
     {
         RaceService.StartRace(raceId);
 
+    }
+
+    private void EndRace(int raceId)
+    {
+        RaceService.EndRace(raceId);
     }
     
 

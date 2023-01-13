@@ -19,18 +19,55 @@
         </thead>
         
         <tbody>
-            @foreach (var ongoingRaces in _races)
-            {
-                <tr>
-                    <td>@ongoingRaces.Id</td>
-                    <td>@ongoingRaces.Name</td>
-                    <td>@ongoingRaces.StartRace</td>
-                    <td><button @onclick="() => ViewRaceInfo(ongoingRaces.Id)" class="btn btn-primary">View more race info</button></td>
-                </tr>
-            }
+        @foreach (var ongoingRaces in _races)
+        {
+            <tr>
+                <td>@ongoingRaces.Id</td>
+                <td>@ongoingRaces.Name</td>
+                <td>@ongoingRaces.StartRace</td>
+                <td><button @onclick="() => ViewRaceInfo(ongoingRaces.Id)" class="btn btn-primary">View more race info</button></td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
+
+<hr/>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            @{
+                if (_raceSwitchOn)
+                {
+                    <h3>Participants in race @_currentRaceId</h3>
+                    <table class="table-bordered table-responsive">
+                        <tbody>
+                        <tr>
+                            <th>Participant id</th>
+                            <th>Full name</th>
+                            <th>Result</th>
+                        </tr>
+                        @foreach (var participant in _participants)
+                        {
+                            <tr>
+                                <td>@participant.Id</td>
+                                <td>@participant.Name</td>
+                                <td>@participant.Result</td>
+                                @if (!participant.EndTime.HasValue)
+                                {
+                                    <td><button  @onclick="() => SetEndTime(participant.Id, _currentRaceId)" class="btn btn-primary">Set Time</button></td>
+                                }
+                            </tr>
+                        }
+
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+    </div>
+</div>
+
 
 @code
 {
@@ -45,11 +82,6 @@
     }
 
     private void ViewRaceInfo(int raceId)
-    {
-        var race = RaceService.GetRace(raceId);
-    }
-    
-    private void ViewResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);
         var previousRaceId = _currentRaceId;
@@ -68,5 +100,10 @@
         else
             _raceSwitchOn = true;
         
+    }
+
+    private void SetEndTime(int participantId, int raceId)
+    {
+        ParticipantService.SetEndTime(participantId, raceId);
     }
 }

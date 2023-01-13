@@ -7,7 +7,7 @@ namespace BlazorApp.Services;
 
 public interface IRaceService
 {
-    void Start(int raceId);
+    void StartRace(int raceId);
     void EndRace(int raceId);
     Race GetRace();
 
@@ -24,15 +24,15 @@ public class RaceService : IRaceService
     {
         _ctx = ctx;
     }
-    public void Start(int raceId)
+    public void StartRace(int raceId)
     {
-        DateTime startTime = DateTime.UtcNow;
+        DateTime startRace = DateTime.UtcNow;
 
         var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
 
-        if (race is not null && race.StartTime is null)
+        if (race is not null && race.StartRace is null)
         {
-            race.StartTime = startTime;
+            race.StartRace = startRace;
             _ctx.SaveChanges();
         }
     }
@@ -41,13 +41,13 @@ public class RaceService : IRaceService
     {
         DateTime endTime = DateTime.UtcNow;
         var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
-        if (race is not null && race.StartTime is not null)
+        if (race is not null && race.StartRace is not null)
         {
             race.EndRace = endTime;
             _ctx.SaveChanges();
         }
     }
-
+    
     public Race GetRace()
     {
         var race = _ctx.Races.FirstOrDefault();

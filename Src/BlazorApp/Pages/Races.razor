@@ -15,11 +15,12 @@
 <div class="container">
     <table class="table" style="margin-top: 10px;">
         <thead>
-            <tr>
-                <th>Race id</th>
-                <th>Race name</th>
-                <th>Start time</th>
-            </tr>
+        <!-- Should be hided if there is no races -->
+        <tr>
+            <th>Race id</th>
+            <th>Race name</th>
+            <th>Start time</th>
+        </tr>
         </thead>
         <tbody>
             @{
@@ -29,7 +30,14 @@
                         <td>@race.Id</td>
                         <td>@race.Name</td>
                         <td>@race.StartTime</td>
-                        <td class="border-bottom-0 border-top-0"><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
+                        @if (race.EndRace is not null)
+                        {
+                            <td class="border-bottom-0 border-top-0"><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
+                        }
+                        @if (race.StartTime is null)
+                        {
+                            <td class="border-bottom-0 border-top-0"><button @onclick="() => StartRace(race.Id)" class="btn btn-primary"></button>Start race</td>
+                        }
                     </tr>
                 }
             }
@@ -116,6 +124,12 @@
        RaceService.AddRace(_name); 
     }
 
+    private void StartRace(int raceId)
+    {
+        RaceService.Start(raceId);
+
+    }
+    
     private void ShowResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);

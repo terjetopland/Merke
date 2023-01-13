@@ -56,12 +56,17 @@ public class ParticipantService : IParticipantService
 
     public void SetEndTime(int raceId, int participantId)
     {
+        // Why is participant found here == null?? The participantId we send in is not null and should match...
         var participant = _ctx.Participants.FirstOrDefault(p => p.Id == participantId && p.RaceId == raceId);
 
         if (participant is not null && participant.EndTime is null)
         {
             participant.EndTime = DateTime.UtcNow;
             _ctx.SaveChanges();
+        }
+        else
+        {
+            throw new Exception("no endtime set!!");
         }
     }
 

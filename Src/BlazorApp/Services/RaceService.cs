@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Runtime.InteropServices.JavaScript;
 using BlazorApp.Data;
 using BlazorApp.Models;
@@ -14,6 +15,8 @@ public interface IRaceService
     Race GetRace(int raceId);
 
     List<Race> GetRaces();
+
+    List<Race> GetOngoingRaces();
     void AddRace(string name);
 }
 public class RaceService : IRaceService
@@ -81,6 +84,12 @@ public class RaceService : IRaceService
     public List<Race> GetRaces()
     {
         var races = _ctx.Races.ToList();
+        return races;
+    }
+
+    public List<Race> GetOngoingRaces()
+    {
+        var races = _ctx.Races.Where(r => r.EndRace == null && r.StartRace.HasValue).ToList();
         return races;
     }
 

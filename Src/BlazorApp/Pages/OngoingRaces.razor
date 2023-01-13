@@ -1,36 +1,72 @@
 ﻿@page "/ongoingraces"
 @using BlazorApp.Services
+@using BlazorApp.Models
+@using BlazorApp.Dtos
 @inject IParticipantService ParticipantService
+@inject IRaceService RaceService
 
-<PageTitle>Register Participant</PageTitle>
-<h1>Register Participant</h1>
+<PageTitle>Ongoing Races</PageTitle>
 
-<div>Please enter a new participant below or choose from the list.</div>
-
-
-
-@*<button class="btn btn-primary" @onclick="AddName">Register new name</button>
-
-
-<input @bind="name"/>
-<div class="@((!IsNameValid() && name.Length >0) ? "d-block": "d-none")" > To short name!</div>
-<div>@name</div>
-
-@code {
-
-    private void AddName()
-    {
-        if (!IsNameValid()) return;
+<div class="container">
+    <table class="table" style="margin-top: 10px;">
+        <thead>
+        <!-- Should be hided if there is no races -->
+        <tr>
+            <th>Race id</th>
+            <th>Race name</th>
+            <th>Start time</th>
+        </tr>
+        </thead>
         
-        ParticipantService.AddParticipant(name);
-        name = String.Empty;
+        <tbody>
+            @foreach (var ongoingRaces in _races)
+            {
+                <tr>
+                    <td>@ongoingRaces.Id</td>
+                    <td>@ongoingRaces.Name</td>
+                    <td>@ongoingRaces.StartRace</td>
+                    <td><button @onclick="() => ViewRaceInfo(ongoingRaces.Id)" class="btn btn-primary">View more race info</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code
+{
+    private List<Race> _races = new List<Race>();
+    private List<ParticipantDto> _participants = new List<ParticipantDto>();
+    private int _currentRaceId;
+    private bool _raceSwitchOn = false;
+
+    protected override void OnInitialized()
+    {
+        _races = RaceService.GetOngoingRaces();
+    }
+
+    private void ViewRaceInfo(int raceId)
+    {
+        var race = RaceService.GetRace(raceId);
     }
     
-    private bool IsNameValid()
+    private void ViewResult(int raceId)
     {
-        return name.Length >= 2;
+        var race = RaceService.GetRace(raceId);
+        var previousRaceId = _currentRaceId;
+        _currentRaceId = race.Id;
+        _participants = ParticipantService.GetParticipants(race.Id);
+        ViewRaceHeading(previousRaceId);
     }
-
-    string name = String.Empty;
+    
+    private void ViewRaceHeading(int prevRaceId)
+    {
+        if (prevRaceId == _currentRaceId)
+        {
+            if (_raceSwitchOn)
+                _raceSwitchOn = false;
+        }
+        else
+            _raceSwitchOn = true;
+        
+    }
 }
-*@

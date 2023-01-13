@@ -30,7 +30,7 @@
                         <td>@race.Id</td>
                         <td>@race.Name</td>
                         <td>@race.StartRace</td>
-                        <td class="border-bottom-0 border-top-0"><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
+                        <td class="border-bottom-0 border-top-0"><button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">Show result</button></td>
                         
                         @if (race.StartRace is null)
                         {
@@ -136,7 +136,7 @@
     }
     
 
-    private void ShowResult(int raceId)
+    private void ViewResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);
         var previousRaceId = _currentRaceId;

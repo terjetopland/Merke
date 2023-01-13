@@ -10,7 +10,7 @@ public interface IParticipantService
 {
     void AddParticipant(string userId, int raceId);
     string GetAll();
-    void SetEndTime(int raceId, int participantId);
+    Task SetEndTime(int raceId, int participantId);
     List<ParticipantDto> GetParticipants(int raceId);
 }
 
@@ -54,15 +54,17 @@ public class ParticipantService : IParticipantService
         throw new NotImplementedException();
     }
 
-    public void SetEndTime(int raceId, int participantId)
+    public async Task SetEndTime(int participantId, int raceId)
     {
-        // Why is participant found here == null?? The participantId we send in is not null and should match...
-        var participant = _ctx.Participants.FirstOrDefault(p => p.Id == participantId && p.RaceId == raceId);
+        // Why is
+        // participant found here == null?? The participantId we send in is not null and should match...
+        
+        var participant = await _ctx.Participants.FirstOrDefaultAsync(p => p.Id == participantId);
 
-        if (participant is not null && participant.EndTime is null)
+        if (participant is not null )
         {
             participant.EndTime = DateTime.UtcNow;
-            _ctx.SaveChanges();
+            await _ctx.SaveChangesAsync();
         }
         else
         {

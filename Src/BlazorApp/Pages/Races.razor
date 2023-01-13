@@ -12,19 +12,30 @@
 <button class="btn btn-primary" @onclick="AddRace">Register new race</button>
 <input @bind="_name"/>
 
-<table>
-    @{
-        foreach (var race in _races)
-        {
+<div class="container">
+    <table class="table" style="margin-top: 10px;">
+        <thead>
             <tr>
-                <td>@race.Id</td>
-                <td>@race.Name</td>
-                <td>@race.StartTime</td>
-                <td><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary" >Show result</button></td>
+                <th>Race id</th>
+                <th>Race name</th>
+                <th>Start time</th>
             </tr>
-        }
-    }
-</table>
+        </thead>
+        <tbody>
+            @{
+                foreach (var race in _races)
+                {
+                    <tr>
+                        <td>@race.Id</td>
+                        <td>@race.Name</td>
+                        <td>@race.StartTime</td>
+                        <td class="border-bottom-0 border-top-0"><button @onclick="() => ShowResult(race.Id)" class="btn btn-primary">Show result</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
 
 <hr/>
 <div class="container">
@@ -81,7 +92,6 @@
                 }
             }
         </div>
-       
     </div>
 </div>
 

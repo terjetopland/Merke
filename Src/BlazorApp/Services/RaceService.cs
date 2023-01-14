@@ -5,7 +5,6 @@ using BlazorApp.Models;
 
 namespace BlazorApp.Services;
 
-
 public interface IRaceService
 {
     void StartRace(int raceId);
@@ -19,6 +18,7 @@ public interface IRaceService
     List<Race> GetOngoingRaces();
     void AddRace(string name);
 }
+
 public class RaceService : IRaceService
 {
     private readonly AppDbContext _ctx;
@@ -27,6 +27,7 @@ public class RaceService : IRaceService
     {
         _ctx = ctx;
     }
+
     public void StartRace(int raceId)
     {
         DateTime startRace = DateTime.UtcNow;
@@ -50,7 +51,7 @@ public class RaceService : IRaceService
             _ctx.SaveChanges();
         }
     }
-    
+
     public Race GetRace()
     {
         var race = _ctx.Races.FirstOrDefault();
@@ -66,8 +67,6 @@ public class RaceService : IRaceService
         _ctx.SaveChanges();
 
         return newRace;
-        
-
     }
 
     public Race GetRace(int raceId)
@@ -95,7 +94,7 @@ public class RaceService : IRaceService
 
     public void AddRace(string name)
     {
-        var newRace = new Race{Name = name};
+        var newRace = new Race {Name = name};
         _ctx.Add(newRace);
         _ctx.SaveChanges();
     }

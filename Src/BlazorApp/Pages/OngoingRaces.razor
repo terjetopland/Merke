@@ -71,10 +71,10 @@
 
 @code
 {
-    private List<Race> _races = new List<Race>();
-    private List<ParticipantDto> _participants = new List<ParticipantDto>();
+    private List<Race> _races = new();
+    private List<ParticipantDto> _participants = new();
     private int _currentRaceId;
-    private bool _raceSwitchOn = false;
+    private bool _raceSwitchOn;
 
     protected override void OnInitialized()
     {

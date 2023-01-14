@@ -1,10 +1,10 @@
 @page "/EndRace"
+
 @using BlazorApp.Services
-@using BlazorApp.Models
 @using BlazorApp.Dtos
+
 @inject IParticipantService Service
 @inject IRaceService RaceService
-
 
 
 <h1>End Race</h1>
@@ -14,7 +14,7 @@
 
 <table>
     <tbody>
-    @foreach (var participant in Participants)
+    @foreach (var participant in _participants ?? Enumerable.Empty<ParticipantDto>())
     {
         <tr @onclick="() => EndTime(participant)">
             <td>@participant.Id</td>
@@ -28,14 +28,13 @@
 </table>
 
 
-
 @code {
-    private List<ParticipantDto> Participants;
+    private List<ParticipantDto>? _participants;
 
     protected override void OnInitialized()
     {
         var race = RaceService.GetRace();
-        Participants = Service.GetParticipants(race.Id);
+        _participants = Service.GetParticipants(race.Id);
     }
 
 
@@ -43,5 +42,4 @@
     {
         Service.SetEndTime(participant.Id, participant.RaceId);
     }
-
 }

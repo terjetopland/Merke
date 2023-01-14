@@ -16,6 +16,7 @@ public class UserService :IUserService
     {
         _ctx = ctx;
     }
+    
     public List<AppUser> GetUsers()
     {
         var users = _ctx.AppUsers.ToList();

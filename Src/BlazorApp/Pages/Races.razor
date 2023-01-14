@@ -1,9 +1,9 @@
 @page "/Races"
+
 @using BlazorApp.Services
 @using BlazorApp.Models
 @using BlazorApp.Dtos
-@using System.Reflection.Metadata
-@using Microsoft.AspNetCore.Razor.TagHelpers
+
 @inject IParticipantService Service
 @inject IRaceService RaceService
 @inject IUserService UserService
@@ -13,128 +13,149 @@
 <input @bind="_name"/>
 
 <div class="container">
-    <table class="table" style="margin-top: 10px;">
-        <thead>
-        <!-- Should be hided if there is no races -->
-        <tr>
-            <th>Race id</th>
-            <th>Race name</th>
-            <th>Start time</th>
-        </tr>
-        </thead>
-        <tbody>
-            @{
-                foreach (var race in _races)
+    <div class="row">
+
+        <div class="col-md-7">
+            <table class="table table-striped mt-1">
+                <thead>
+                <!-- Should be hided if there is no races -->
+                <tr>
+                    <th>Race id</th>
+                    <th>Race name</th>
+                    <th>Start time</th>
+                    <th colspan="4"></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var race in _races)
                 {
                     <tr>
                         <td>@race.Id</td>
                         <td>@race.Name</td>
                         <td>@race.StartRace</td>
-                        <td class="border-bottom-0 border-top-0"><button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">Show result</button></td>
-                        
-                        @if (race.StartRace is null)
-                        {
-                            <td class="border-bottom-0 border-top-0"><button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button></td>
-                        }
-                        @if (race.EndRace is null && race.StartRace is not null)
-                        {
-                            <td class="border-bottom-0 border-top-0"><button @onclick="() => EndRace(race.Id)" class="btn btn-primary">End Race</button></td>
-                        }
+                        <td>
+                            <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">Show result</button>
+                        </td>
+
+                        <td>
+                            @if (race.StartRace is null)
+                            {
+                                <button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button>
+                            }
+                        </td>
+                        <td>
+                            @if (race.EndRace is null && race.StartRace is not null)
+                            {
+                            }
+                        </td>
+                        <td>
+                            <button @onclick="() => DeleteRace(race.Id)" class="btn btn-danger">Delete</button>
+                        </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
-</div>
-
-<hr/>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            @{
-                if (_raceSwitchOn)
-                {
-                    <h3>Participants in race @_currentRaceId</h3>
-                    <table class="table-bordered table-responsive">
-                        <tbody>
+                </tbody>
+            </table>
+        </div>
+       
+        @* users *@
+        <div class="col-md-5">
+            @if (_raceSwitchOn)
+            {
+                <h3>Participants in race @_currentRaceId</h3>
+                <table class="table table-bordered table-responsive">
+                    <tbody>
+                    <tr>
+                        <th>Participant id</th>
+                        <th>Full name</th>
+                        <th>Result</th>
+                    </tr>
+                    @foreach (var participant in _participants)
+                    {
                         <tr>
-                            <th>Participant id</th>
-                            <th>Full name</th>
-                            <th>Result</th>
+                            <td>@participant.Id</td>
+                            <td>@participant.Name</td>
+                            <td>@participant.Result</td>
                         </tr>
-                        @foreach (var participant in _participants)
-                        {
-                            <tr>
-                                <td>@participant.Id</td>
-                                <td>@participant.Name</td>
-                                <td>@participant.Result</td>
-                            </tr>
-                        }
-
-                        </tbody>
-                    </table>
-                }
+                    }
+                    </tbody>
+                </table>
             }
-        </div>
-        
-        
-        <div class="col-sm-6">
+
             <button @onclick="GetUsers" class="btn btn-primary">Show all users</button>
-            @{
-                if (_usersSwitchOn)
-                {
-                    <h3>All users</h3>
-                    <table class="table-bordered table-responsive">
-                        <tbody>
-                        @foreach (var user in _users)
-                        {
-                            <tr>
-                                <td>@user.Name</td>
-                                <td>@user.DateOfBirth</td>
-                                <td><button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add</button></td>
-                            </tr>
-                        }
-
-                        </tbody>
-                    </table>
-                }
+            @if (_usersSwitchOn)
+            {
+                <h3>All users</h3>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Full name</th>
+                        <th>Emaild</th>
+                        <th>Date of Birth</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var user in _users)
+                    {
+                        <tr>
+                            <td>@(string.IsNullOrWhiteSpace(user.Name) ? "<No name>" : user.Name)</td>
+                            <td>@user.Email</td>
+                            <td>@(user.DateOfBirth is null ? "<Not set>" : user.DateOfBirth)</td>
+                            <td>
+                                <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add</button>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
             }
         </div>
+        
     </div>
 </div>
 
 @code {
-    private List<ParticipantDto> _participants = new List<ParticipantDto>();
-    private List<Race> _races = new List<Race>();
-    private List<AppUser> _users = new List<AppUser>();
-    private string _name = String.Empty;
+    private List<ParticipantDto> _participants = new();
+    private List<Race> _races = new();
+    private List<AppUser> _users = new();
+    private string _name = string.Empty;
     private int _currentRaceId;
-    private bool _usersSwitchOn = false;
-    private bool _raceSwitchOn = false;
+    private bool _usersSwitchOn;
+    private bool _raceSwitchOn;
 
-    protected override void OnInitialized()
+    protected override void OnInitialized() // OnInitialized: what should happen when the component is initialized
+    {
+        FetchRaces();
+    //var race = RaceService.GetRace();
+    //_participants = Service.GetParticipants(race.Id);
+    }
+
+    private void FetchRaces()
     {
         _races = RaceService.GetRaces();
-        //var race = RaceService.GetRace();
-        //_participants = Service.GetParticipants(race.Id);
     }
 
     private void AddRace()
     {
-       RaceService.AddRace(_name); 
+        RaceService.AddRace(_name);
+        FetchRaces();
+    }
+
+    private void DeleteRace(int raceId)
+    {
+        RaceService.Delete(raceId);
+        FetchRaces();
     }
 
     private void StartRace(int raceId)
     {
         RaceService.StartRace(raceId);
-
     }
 
     private void EndRace(int raceId)
     {
         RaceService.EndRace(raceId);
     }
-    
 
     private void ViewResult(int raceId)
     {
@@ -148,11 +169,7 @@
     private void GetUsers()
     {
         _users = UserService.GetUsers();
-        if (_usersSwitchOn)
-            _usersSwitchOn = false;
-        else
-            _usersSwitchOn = true;
-
+        _usersSwitchOn = !_usersSwitchOn;
     }
 
     private void SetParticipant(string userId)
@@ -169,6 +186,6 @@
         }
         else
             _raceSwitchOn = true;
-        
     }
-}
+    }
+

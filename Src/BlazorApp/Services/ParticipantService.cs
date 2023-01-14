@@ -18,7 +18,7 @@ public class ParticipantService : IParticipantService
 {
     private readonly AppDbContext _ctx;
     private UserManager<AppUser> _userManager;
-    
+
     public ParticipantService(AppDbContext ctx, UserManager<AppUser> userManager)
     {
         _ctx = ctx;
@@ -29,13 +29,13 @@ public class ParticipantService : IParticipantService
     {
         var race = _ctx.Races.FirstOrDefault();
         if (race is not null) return race.Id;
-        
+
         var newRace = new Race();
         _ctx.Add(newRace);
         _ctx.SaveChanges();
         return newRace.Id;
     }
-    
+
     public void AddParticipant(string userId, int raceId)
     {
         var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
@@ -47,7 +47,7 @@ public class ParticipantService : IParticipantService
         _ctx.Participants.Add(participant);
         _ctx.SaveChanges();
     }
-    
+
 
     public string GetAll()
     {
@@ -58,10 +58,9 @@ public class ParticipantService : IParticipantService
     {
         // Why is
         // participant found here == null?? The participantId we send in is not null and should match...
-        
         var participant = await _ctx.Participants.FirstOrDefaultAsync(p => p.Id == participantId);
 
-        if (participant is not null )
+        if (participant is not null)
         {
             participant.EndTime = DateTime.UtcNow;
             await _ctx.SaveChangesAsync();
@@ -95,18 +94,19 @@ public class ParticipantService : IParticipantService
                     RaceId = participant.RaceId,
                     EndTime = participant.EndTime,
                     Name = participant.User?.Name ?? "<unknown>",
-                    Result = participant.EndTime - race.StartTime 
+                    Result = participant.EndTime - race.StartTime
                 });
             }
-            participantsDto.Sort((participant1, participant2)=>
+
+            participantsDto.Sort((participant1, participant2) =>
                 TimeSpan.Compare(
                     participant1.Result ?? new TimeSpan(0),
                     participant2.Result ?? new TimeSpan(0)));
-
         }
-        
-      
+
+
         return participantsDto;
-        
     }
+    
+    
 }

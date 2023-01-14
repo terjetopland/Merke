@@ -44,6 +44,8 @@ public class ParticipantService : IParticipantService
         if (raceId != 0)
         {
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+
+            
             var participant = new Participant
             {
                 User = user,

@@ -96,8 +96,7 @@
     {
         if (prevRaceId == _currentRaceId)
         {
-            if (_raceSwitchOn)
-                _raceSwitchOn = false;
+            _raceSwitchOn = !_raceSwitchOn;
         }
         else
             _raceSwitchOn = true;

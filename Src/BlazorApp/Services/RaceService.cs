@@ -91,7 +91,7 @@ public class RaceService : IRaceService
 
     public List<Race> GetOngoingRaces()
     {
-        Expression<Func<Race, bool>> onGoingRacesFilter = race => race.StartRace == null && race.EndRace == null;
+        Expression<Func<Race, bool>> onGoingRacesFilter = race => race.StartRace != null && race.EndRace == null;
         
         var races = _ctx.Races.Where(onGoingRacesFilter).ToList();
         return races;

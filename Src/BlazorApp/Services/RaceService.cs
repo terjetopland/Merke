@@ -1,7 +1,7 @@
-using System.ComponentModel;
-using System.Runtime.InteropServices.JavaScript;
+using System.Linq.Expressions;
 using BlazorApp.Data;
 using BlazorApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Services;
 
@@ -17,6 +17,7 @@ public interface IRaceService
 
     List<Race> GetOngoingRaces();
     void AddRace(string name);
+    void Delete(int raceId);
 }
 
 public class RaceService : IRaceService
@@ -71,7 +72,9 @@ public class RaceService : IRaceService
 
     public Race GetRace(int raceId)
     {
-        var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
+        Expression<Func<Race, bool>> raceEqual = r => r.Id == raceId;
+        
+        var race = _ctx.Races.FirstOrDefault(raceEqual);
         if (race is not null)
         {
             return race;
@@ -88,7 +91,9 @@ public class RaceService : IRaceService
 
     public List<Race> GetOngoingRaces()
     {
-        var races = _ctx.Races.Where(r => r.EndRace == null && r.StartRace.HasValue).ToList();
+        Expression<Func<Race, bool>> onGoingRacesFilter = race => race.StartRace == null && race.EndRace == null;
+        
+        var races = _ctx.Races.Where(onGoingRacesFilter).ToList();
         return races;
     }
 
@@ -96,6 +101,24 @@ public class RaceService : IRaceService
     {
         var newRace = new Race {Name = name};
         _ctx.Add(newRace);
+        _ctx.SaveChanges();
+    }
+
+    public void Delete(int raceId)
+    {
+        var raceAndParticipants = _ctx.Races
+            .Include(r => r.Participants)
+            .FirstOrDefault(r => r.Id == raceId);
+        
+        // check if there are participants in race
+        if (raceAndParticipants?.Participants.Count > 0)
+        {
+            throw new Exception($"Cannot delete a race with participants");
+        }
+
+        if (raceAndParticipants is null) return;
+        
+        _ctx.Races.Remove(raceAndParticipants);
         _ctx.SaveChanges();
     }
 }

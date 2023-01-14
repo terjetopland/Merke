@@ -1,7 +1,9 @@
 ﻿@page "/ongoingraces"
+
 @using BlazorApp.Services
 @using BlazorApp.Models
 @using BlazorApp.Dtos
+
 @inject IParticipantService ParticipantService
 @inject IRaceService RaceService
 
@@ -40,7 +42,7 @@
                 if (_raceSwitchOn)
                 {
                     <h3>Participants in race @_currentRaceId</h3>
-                    <table class="table-bordered table-responsive">
+                    <table class="table table-bordered table-responsive">
                         <tbody>
                         <tr>
                             <th>Participant id</th>
@@ -99,7 +101,6 @@
         }
         else
             _raceSwitchOn = true;
-        
     }
 
     private void SetEndTime(int participantId, int raceId)

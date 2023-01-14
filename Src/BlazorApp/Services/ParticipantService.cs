@@ -12,6 +12,8 @@ public interface IParticipantService
     string GetAll();
     Task SetEndTime(int raceId, int participantId);
     List<ParticipantDto> GetParticipants(int raceId);
+    
+    
 }
 
 public class ParticipantService : IParticipantService
@@ -38,14 +40,19 @@ public class ParticipantService : IParticipantService
 
     public void AddParticipant(string userId, int raceId)
     {
-        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-        var participant = new Participant
+
+        if (raceId != 0)
         {
-            User = user,
-            RaceId = raceId
-        };
-        _ctx.Participants.Add(participant);
-        _ctx.SaveChanges();
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+            var participant = new Participant
+            {
+                User = user,
+                RaceId = raceId
+            };
+            _ctx.Participants.Add(participant);
+            _ctx.SaveChanges();
+        }
+        
     }
 
 

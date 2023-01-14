@@ -34,7 +34,7 @@
                         <td>@race.Name</td>
                         <td>@race.StartRace</td>
                         <td>
-                            <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">Show result</button>
+                            <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">View result</button>
                         </td>
 
                         <td>
@@ -101,9 +101,13 @@
                             <td>@(string.IsNullOrWhiteSpace(user.Name) ? "<No name>" : user.Name)</td>
                             <td>@user.Email</td>
                             <td>@(user.DateOfBirth is null ? "<Not set>" : user.DateOfBirth)</td>
-                            <td>
-                                <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add</button>
-                            </td>
+                            @if (_currentRaceId != 0)
+                            {
+                                <td>
+                                    <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add to race @_currentRaceId</button>
+                                </td> 
+                            }
+                            
                         </tr>
                     }
                     </tbody>
@@ -181,8 +185,8 @@
     {
         if (prevRaceId == _currentRaceId)
         {
-            if (_raceSwitchOn)
-                _raceSwitchOn = false;
+           
+                _raceSwitchOn = !_raceSwitchOn;
         }
         else
             _raceSwitchOn = true;

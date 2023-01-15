@@ -75,7 +75,14 @@
                         <tr>
                             <td>@participant.Id</td>
                             <td>@participant.Name</td>
-                            <td>@participant.Result</td>
+                            @if (participant.EndTime == DateTime.MaxValue)
+                            {
+                                <td>Did not finish</td>
+                            }
+                            else
+                            {
+                                <td>@participant.Result</td>
+                            }
                         </tr>
                     }
                     </tbody>

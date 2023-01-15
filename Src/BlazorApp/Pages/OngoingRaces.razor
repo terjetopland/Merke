@@ -72,7 +72,6 @@
                     {
                         <button @onclick="() => EndRace(_race.Id)" class="btn btn-dark">End Race</button>
                     }
-                    <div></div>
                 }
             }
         </div>
@@ -84,7 +83,7 @@
 {
     private List<Race> _races = new();
     private List<ParticipantDto> _participants = new();
-    private Race _race;
+    private Race _race = new();
     private int _currentRaceId;
     private bool _raceSwitchOn;
 

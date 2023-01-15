@@ -68,6 +68,11 @@
 
                         </tbody>
                     </table>
+                    @if (_race.EndRace is null && _race.StartRace is not null)
+                    {
+                        <button @onclick="() => EndRace(_race.Id)" class="btn btn-dark">End Race</button>
+                    }
+                    <div></div>
                 }
             }
         </div>
@@ -79,6 +84,7 @@
 {
     private List<Race> _races = new();
     private List<ParticipantDto> _participants = new();
+    private Race _race;
     private int _currentRaceId;
     private bool _raceSwitchOn;
 
@@ -92,6 +98,7 @@
         var race = RaceService.GetRace(raceId);
         var previousRaceId = _currentRaceId;
         _currentRaceId = race.Id;
+        _race = GetRace(_currentRaceId);
         _participants = ParticipantService.GetParticipants(race.Id);
         ViewRaceHeading(previousRaceId);
     }
@@ -110,5 +117,16 @@
     {
         ParticipantService.SetEndTime(participantId, raceId);
         _participants = ParticipantService.GetParticipants(raceId);
+    }
+
+    private void EndRace(int raceId)
+    {
+        RaceService.EndRace(raceId);
+    }
+
+    private Race GetRace(int raceId)
+    {
+        var race = RaceService.GetRace(raceId);
+        return race;
     }
 }

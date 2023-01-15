@@ -59,6 +59,10 @@
                                 {
                                     <td><button  @onclick="() => SetEndTime(participant.Id, _currentRaceId)" class="btn btn-primary">Set Time</button></td>
                                 }
+                                else
+                                {
+                                    <td><button  @onclick="() => SetEndTime(participant.Id, _currentRaceId)" class="btn btn-secondary">Set Time Again</button></td>
+                                }
                             </tr>
                         }
 
@@ -105,5 +109,6 @@
     private void SetEndTime(int participantId, int raceId)
     {
         ParticipantService.SetEndTime(participantId, raceId);
+        _participants = ParticipantService.GetParticipants(raceId);
     }
 }

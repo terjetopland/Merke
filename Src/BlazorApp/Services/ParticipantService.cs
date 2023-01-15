@@ -10,7 +10,7 @@ public interface IParticipantService
 {
     void AddParticipant(string userId, int raceId);
     string GetAll();
-    Task SetEndTime(int raceId, int participantId);
+    Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
     
     
@@ -40,12 +40,12 @@ public class ParticipantService : IParticipantService
 
     public void AddParticipant(string userId, int raceId)
     {
-        var raceParticipants =
+        var userNotParticipantYet =
             _ctx.Participants
                 .Include(p => p.User)
                 .FirstOrDefault(p => p.RaceId == raceId && p.User!.Id == userId);
 
-        if (raceParticipants is null)
+        if (userNotParticipantYet is null)
         {
 
             if (raceId != 0)
@@ -72,8 +72,6 @@ public class ParticipantService : IParticipantService
 
     public async Task SetEndTime(int participantId, int raceId)
     {
-        // Why is
-        // participant found here == null?? The participantId we send in is not null and should match...
         var participant = await _ctx.Participants.FirstOrDefaultAsync(p => p.Id == participantId);
 
         if (participant is not null)

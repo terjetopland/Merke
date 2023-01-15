@@ -76,6 +76,7 @@
                             <td>@participant.Id</td>
                             <td>@participant.Name</td>
                             <td>@participant.Result</td>
+                            
                         </tr>
                     }
                     </tbody>
@@ -186,8 +187,7 @@
     {
         if (prevRaceId == _currentRaceId)
         {
-           
-                _raceSwitchOn = !_raceSwitchOn;
+            _raceSwitchOn = !_raceSwitchOn;
         }
         else
             _raceSwitchOn = true;

@@ -3,6 +3,7 @@ using BlazorApp.Data;
 using BlazorApp.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace BlazorApp.Services;
 
 public interface IRaceService
@@ -44,11 +45,21 @@ public class RaceService : IRaceService
 
     public void EndRace(int raceId)
     {
+        var participantsNotEndedRace = _ctx.Participants
+            .Where(p => p.RaceId == raceId)
+            .ToList();
+        
         DateTime endTime = DateTime.UtcNow;
         var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
         if (race is not null && race.StartRace is not null)
         {
             race.EndRace = endTime;
+            _ctx.SaveChanges();
+        }
+
+        foreach (var participantNotEnded in participantsNotEndedRace)
+        {
+            participantNotEnded.EndTime = DateTime.MaxValue;
             _ctx.SaveChanges();
         }
     }

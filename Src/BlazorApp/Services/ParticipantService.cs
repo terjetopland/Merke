@@ -108,7 +108,7 @@ public class ParticipantService : IParticipantService
                     RaceId = participant.RaceId,
                     EndTime = participant.EndTime,
                     Name = participant.User?.Name ?? "<unknown>",
-                    Result = participant.EndTime - race.StartTime
+                    Result = participant.EndTime - race.StartRace
                 });
             }
 

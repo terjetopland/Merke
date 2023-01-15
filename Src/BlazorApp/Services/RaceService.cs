@@ -61,8 +61,12 @@ public class RaceService : IRaceService
         //Set maxvalue to all participants that has not ended race before the race ends
         foreach (var participantNotEnded in participantsNotEndedRace)
         {
-            participantNotEnded.EndTime = DateTime.MaxValue;
-            _ctx.SaveChanges();
+            if (!participantNotEnded.EndTime.HasValue)
+            {
+                participantNotEnded.EndTime = DateTime.MaxValue;
+                _ctx.SaveChanges();
+            }
+            
         }
     }
 

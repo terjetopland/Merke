@@ -8,6 +8,7 @@ namespace BlazorApp.Services;
 
 public interface IRaceService
 {
+    void SetStartTime(int raceId, DateTime dateTime);
     void StartRace(int raceId);
     void EndRace(int raceId);
     Race GetRace();
@@ -17,7 +18,7 @@ public interface IRaceService
     List<Race> GetRaces();
 
     List<Race> GetOngoingRaces();
-    void AddRace(string name);
+    void AddRace(string name, DateTime dateTime);
     void Delete(int raceId);
 }
 
@@ -28,6 +29,12 @@ public class RaceService : IRaceService
     public RaceService(AppDbContext ctx)
     {
         _ctx = ctx;
+    }
+
+    public void SetStartTime(int raceId, DateTime dateTime)
+    {
+        var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
+       //somthing happens.... 
     }
 
     public void StartRace(int raceId)
@@ -114,9 +121,9 @@ public class RaceService : IRaceService
         return races;
     }
 
-    public void AddRace(string name)
+    public void AddRace(string name, DateTime dateTime)
     {
-        var newRace = new Race {Name = name};
+        var newRace = new Race {Name = name, StartTime = dateTime};
         _ctx.Add(newRace);
         _ctx.SaveChanges();
     }

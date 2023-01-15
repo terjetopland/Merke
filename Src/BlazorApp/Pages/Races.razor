@@ -11,6 +11,7 @@
 <h3>Races</h3>
 <button class="btn btn-primary" @onclick="AddRace">Register new race</button>
 <input @bind="_name"/>
+<input @bind="_dateTime" type="datetime-local"/>
 
 <div class="container">
     <div class="row">
@@ -131,6 +132,7 @@
     private List<Race> _races = new();
     private List<AppUser> _users = new();
     private string _name = string.Empty;
+    private DateTime _dateTime;
     private int _currentRaceId;
     private bool _usersSwitchOn;
     private bool _raceSwitchOn;
@@ -149,7 +151,7 @@
 
     private void AddRace()
     {
-        RaceService.AddRace(_name);
+        RaceService.AddRace(_name, _dateTime);
         FetchRaces();
     }
 

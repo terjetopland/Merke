@@ -45,6 +45,7 @@ public class RaceService : IRaceService
 
     public void EndRace(int raceId)
     {
+        //Getting all participants that has not yet finished the race
         var participantsNotEndedRace = _ctx.Participants
             .Where(p => p.RaceId == raceId)
             .ToList();
@@ -56,7 +57,8 @@ public class RaceService : IRaceService
             race.EndRace = endTime;
             _ctx.SaveChanges();
         }
-
+        
+        //Set maxvalue to all participants that has not ended race before the race ends
         foreach (var participantNotEnded in participantsNotEndedRace)
         {
             participantNotEnded.EndTime = DateTime.MaxValue;

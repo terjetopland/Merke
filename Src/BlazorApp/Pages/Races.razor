@@ -46,6 +46,7 @@
                         <td>
                             @if (race.EndRace is null && race.StartRace is not null)
                             {
+                                <button @onclick="() => EndRace(race.Id)" class="btn btn-dark">End Race</button>
                             }
                         </td>
                         <td>

@@ -40,21 +40,30 @@ public class ParticipantService : IParticipantService
 
     public void AddParticipant(string userId, int raceId)
     {
+        var raceParticipants =
+            _ctx.Participants
+                .Include(p => p.User)
+                .FirstOrDefault(p => p.RaceId == raceId && p.User!.Id == userId);
 
-        if (raceId != 0)
+        if (raceParticipants is null)
         {
-            var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-            var participant = new Participant
-            {
-                User = user,
-                RaceId = raceId
-            };
-            _ctx.Participants.Add(participant);
-            _ctx.SaveChanges();
-        }
-        
-    }
 
+            if (raceId != 0)
+            {
+                var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+
+
+                var participant = new Participant
+                {
+                    User = user,
+                    RaceId = raceId
+                };
+                _ctx.Participants.Add(participant);
+                _ctx.SaveChanges();
+            }
+
+        }
+    }
 
     public string GetAll()
     {

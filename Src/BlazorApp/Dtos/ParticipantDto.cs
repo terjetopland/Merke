@@ -9,7 +9,6 @@ public class ParticipantDto
     
     public DateTime? EndTime { get; set; }
     public string Name { get; set; } = default!;
-    
     public TimeSpan? Result { get; set; }
     
     public string? Result2 { get; set; }

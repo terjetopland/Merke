@@ -14,6 +14,8 @@ public interface IParticipantService
     List<ParticipantDto> GetParticipants(int raceId);
     
     
+
+
 }
 
 public class ParticipantService : IParticipantService
@@ -126,6 +128,5 @@ public class ParticipantService : IParticipantService
 
         return participantsDto;
     }
-    
     
 }

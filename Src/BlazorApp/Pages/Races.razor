@@ -130,6 +130,7 @@
 @code {
     private List<ParticipantDto> _participants = new();
     private List<Race> _races = new();
+    private Race _currentRace = new();
     private List<AppUser> _users = new();
     private string _name = string.Empty;
     private int _currentRaceId;
@@ -173,6 +174,7 @@
     private void ViewResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);
+        _currentRace = race;
         var previousRaceId = _currentRaceId;
         _currentRaceId = race.Id;
         _participants = Service.GetParticipants(race.Id);
@@ -199,5 +201,6 @@
         else
             _raceSwitchOn = true;
     }
+    
     }
 

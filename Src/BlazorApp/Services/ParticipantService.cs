@@ -109,7 +109,8 @@ public class ParticipantService : IParticipantService
                     RaceId = participant.RaceId,
                     EndTime = participant.EndTime,
                     Name = participant.User?.Name ?? "<unknown>",
-                    Result = participant.EndTime - race.StartRace,
+                    Result = participant.EndTime - race.StartRace
+
                     //Result2 = (participant.EndTime - race.StartRace).ToString("hh\\:mm")
                     // Cant figure out how to convert the result to desired format
 

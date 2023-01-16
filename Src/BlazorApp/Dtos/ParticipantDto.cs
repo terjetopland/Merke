@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BlazorApp.Dtos;
 
 public class ParticipantDto

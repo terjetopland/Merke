@@ -81,7 +81,8 @@
                             }
                             else
                             {
-                                <td>@participant.Result</td>
+                                <!-- Thanks to Ådne-Sigurd Leirdal I got the right format-->
+                                <td>@participant.Result.GetValueOrDefault().ToString(@"hh\:mm\:ss")</td>
                             }
                         </tr>
                     }

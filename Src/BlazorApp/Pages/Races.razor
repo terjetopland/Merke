@@ -106,11 +106,13 @@
                     <tbody>
                     @foreach (var user in _users)
                     {
+                        UserIsParticipantInRace(user.Id, _currentRaceId);
+                        
                         <tr>
                             <td>@(string.IsNullOrWhiteSpace(user.Name) ? "<No name>" : user.Name)</td>
                             <td>@user.Email</td>
                             <td>@(user.DateOfBirth is null ? "<Not set>" : user.DateOfBirth)</td>
-                            @if (_currentRaceId != 0)
+                            @if (_currentRaceId != 0 && !_userIsParticipant)
                             {
                                 <td>
                                     <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add to race @_currentRaceId</button>
@@ -135,6 +137,7 @@
     private int _currentRaceId;
     private bool _usersSwitchOn;
     private bool _raceSwitchOn;
+    private bool _userIsParticipant;
 
     protected override void OnInitialized() // OnInitialized: what should happen when the component is initialized
     {
@@ -199,6 +202,21 @@
         else
             _raceSwitchOn = true;
     }
-    
+
+    private void UserIsParticipantInRace(string userId, int raceId)
+    {
+        var currentParticipants = Service.GetUsersInRace(raceId);
+
+        var userIsParticipant =  currentParticipants.FirstOrDefault(u => u.User?.Id == userId);
+
+        if (userIsParticipant is not null)
+        {
+            _userIsParticipant = true;
+        }
+        else
+        {
+            _userIsParticipant = false;
+        }
+    }
     }
 

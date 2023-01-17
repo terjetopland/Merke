@@ -21,7 +21,6 @@ builder.Services.AddServerSideBlazor();
 // Dependency injection
 builder.Services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
 builder.Services.AddScoped<IRaceService, RaceService>();
 builder.Services.AddScoped<IUserService, UserService>();

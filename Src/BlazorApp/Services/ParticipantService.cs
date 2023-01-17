@@ -12,8 +12,7 @@ public interface IParticipantService
     string GetAll();
     Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
-    
-    
+    List<Participant> GetUsersInRace( int raceId);
 }
 
 public class ParticipantService : IParticipantService
@@ -51,7 +50,6 @@ public class ParticipantService : IParticipantService
             if (raceId != 0)
             {
                 var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-
 
                 var participant = new Participant
                 {
@@ -110,9 +108,7 @@ public class ParticipantService : IParticipantService
                     EndTime = participant.EndTime,
                     Name = participant.User?.Name ?? "<unknown>",
                     Result = participant.EndTime - race.StartRace
-
-                    //Result2 = (participant.EndTime - race.StartRace).ToString("hh\\:mm")
-                    // Cant figure out how to convert the result to desired format
+                    
 
                 });
             }
@@ -127,5 +123,17 @@ public class ParticipantService : IParticipantService
         return participantsDto;
     }
     
+    //This is maybe not DRY, but now I figured out how to get currentParticipant and hide button 'Add' if user was already participant
+    //VillereV maybe you have a better solution for this.
+    public List<Participant> GetUsersInRace( int raceId)
+    {
+        List<Participant> usersInRace = _ctx.Participants
+            .Include(p => p.User)
+            .Where(p=> p.RaceId == raceId)
+            .ToList();
+        
+
+        return usersInRace;
+    }
     
 }

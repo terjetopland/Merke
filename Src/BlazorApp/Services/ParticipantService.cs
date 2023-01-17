@@ -12,10 +12,7 @@ public interface IParticipantService
     string GetAll();
     Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
-    
-    
-
-
+    List<Participant> GetUserNotParticipant(string userId, int raceId);
 }
 
 public class ParticipantService : IParticipantService
@@ -53,7 +50,6 @@ public class ParticipantService : IParticipantService
             if (raceId != 0)
             {
                 var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-
 
                 var participant = new Participant
                 {
@@ -127,6 +123,15 @@ public class ParticipantService : IParticipantService
 
 
         return participantsDto;
+    }
+    public List<Participant> GetUserNotParticipant(string userId, int raceId)
+    {
+        List<Participant> userParticipant = _ctx.Participants
+            .Include(p => p.User)
+            .Where(p=> p.User != null && p.User.Id == userId && p.RaceId == raceId)
+            .ToList();
+
+        return userParticipant;
     }
     
 }

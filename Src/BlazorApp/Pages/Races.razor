@@ -80,7 +80,8 @@
                             {
                                 <!-- Thanks to Ådne-Sigurd Leirdal I got the right format-->
                                 <td>@participant.Result.GetValueOrDefault().ToString(@"hh\:mm\:ss")</td>
-                            }
+                            }     
+                            <td><button @onclick="() => DeleteParticipant(participant.Id, _currentRaceId)" class="btn btn-info">Delete participant</button></td>
                         </tr>
                     }
                     </tbody>
@@ -195,6 +196,12 @@
     {
         Service.AddParticipant(userId, _currentRaceId);
         UpdateResult(_currentRaceId);
+    }
+
+    private void DeleteParticipant(int participantId, int raceId)
+    {
+        Service.DeleteParticipant(participantId, raceId);
+        UpdateResult(raceId);
     }
 
     private void ViewRaceHeading(int prevRaceId)

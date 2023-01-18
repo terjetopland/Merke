@@ -12,7 +12,7 @@ public interface IParticipantService
     string GetAll();
     Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
-    List<Participant> GetUsersInRace( int raceId);
+    List<Participant> GetParticipantUsersInRace( int raceId);
 }
 
 public class ParticipantService : IParticipantService
@@ -125,7 +125,7 @@ public class ParticipantService : IParticipantService
     
     //This is maybe not DRY, but now I figured out how to get currentParticipant and hide button 'Add' if user was already participant
     //VillereV maybe you have a better solution for this.
-    public List<Participant> GetUsersInRace( int raceId)
+    public List<Participant> GetParticipantUsersInRace( int raceId)
     {
         List<Participant> usersInRace = _ctx.Participants
             .Include(p => p.User)

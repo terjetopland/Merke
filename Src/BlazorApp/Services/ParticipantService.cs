@@ -9,7 +9,6 @@ namespace BlazorApp.Services;
 public interface IParticipantService
 {
     void AddParticipant(string userId, int raceId);
-    string GetAll();
     Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
     List<Participant> GetParticipantUsersInRace( int raceId);
@@ -25,18 +24,7 @@ public class ParticipantService : IParticipantService
         _ctx = ctx;
         _userManager = userManager;
     }
-
-    private int AddOrGetRaceId()
-    {
-        var race = _ctx.Races.FirstOrDefault();
-        if (race is not null) return race.Id;
-
-        var newRace = new Race();
-        _ctx.Add(newRace);
-        _ctx.SaveChanges();
-        return newRace.Id;
-    }
-
+    
     public void AddParticipant(string userId, int raceId)
     {
         var userNotParticipantYet =
@@ -62,12 +50,7 @@ public class ParticipantService : IParticipantService
 
         }
     }
-
-    public string GetAll()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public async Task SetEndTime(int participantId, int raceId)
     {
         var participant = await _ctx.Participants.FirstOrDefaultAsync(p => p.Id == participantId);

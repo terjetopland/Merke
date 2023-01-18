@@ -36,19 +36,16 @@
                         <td>
                             <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">View result</button>
                         </td>
-
-                        <td>
-                            @if (race.StartRace is null)
-                            {
-                                <button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button>
-                            }
-                        </td>
-                        <td>
-                            @if (race.EndRace is null && race.StartRace is not null)
-                            {
-                                <button @onclick="() => EndRace(race.Id)" class="btn btn-dark">End Race</button>
-                            }
-                        </td>
+                        <td>   
+                             @if (race.StartRace is null)
+                             {
+                                 <button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button>
+                             }   
+                             @if (race.EndRace is null && race.StartRace is not null)
+                             {
+                                 <button @onclick="() => EndRace(race.Id)" class="btn btn-dark">End Race</button>
+                             }
+                        </td> 
                         <td>
                             <button @onclick="() => DeleteRace(race.Id)" class="btn btn-danger">Delete</button>
                         </td>
@@ -181,6 +178,12 @@
         _participants = Service.GetParticipants(race.Id);
         ViewRaceHeading(previousRaceId);
     }
+    private void UpdateResult(int raceId)
+    {
+        var race = RaceService.GetRace(raceId);
+        _participants = Service.GetParticipants(race.Id);
+        
+    }
 
     private void GetUsers()
     {
@@ -191,6 +194,7 @@
     private void SetParticipant(string userId)
     {
         Service.AddParticipant(userId, _currentRaceId);
+        UpdateResult(_currentRaceId);
     }
 
     private void ViewRaceHeading(int prevRaceId)
@@ -217,6 +221,7 @@
         {
             _userIsParticipant = false;
         }
+        
     }
     }
 

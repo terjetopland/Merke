@@ -9,7 +9,7 @@ namespace BlazorApp.Services;
 public interface IParticipantService
 {
     void AddParticipant(string userId, int raceId);
-    string GetAll();
+    void DeleteParticipant(int participantId, int raceId);
     Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
     List<Participant> GetParticipantUsersInRace( int raceId);
@@ -25,18 +25,7 @@ public class ParticipantService : IParticipantService
         _ctx = ctx;
         _userManager = userManager;
     }
-
-    private int AddOrGetRaceId()
-    {
-        var race = _ctx.Races.FirstOrDefault();
-        if (race is not null) return race.Id;
-
-        var newRace = new Race();
-        _ctx.Add(newRace);
-        _ctx.SaveChanges();
-        return newRace.Id;
-    }
-
+    
     public void AddParticipant(string userId, int raceId)
     {
         var userNotParticipantYet =
@@ -63,9 +52,21 @@ public class ParticipantService : IParticipantService
         }
     }
 
-    public string GetAll()
+    public void DeleteParticipant(int participantId, int raceId)
     {
-        throw new NotImplementedException();
+        var raceAndParticipant = _ctx.Participants
+            .FirstOrDefault(p => p.Id == participantId && p.RaceId == raceId);
+        
+            // check if there are participants in race
+            if (raceAndParticipant is not null)
+            {
+                _ctx.Participants.Remove(raceAndParticipant);
+                _ctx.SaveChanges();
+                return;
+            }
+
+            if (raceAndParticipant is null) throw new Exception("Cannot delete participant");
+
     }
 
     public async Task SetEndTime(int participantId, int raceId)

@@ -1,7 +1,9 @@
+using System.Net;
 using BlazorApp.Data;
 using BlazorApp.Dtos;
 using BlazorApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Services;
@@ -54,11 +56,13 @@ public class ParticipantService : IParticipantService
 
     public void DeleteParticipant(int participantId, int raceId)
     {
+        var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
+        
         var raceAndParticipant = _ctx.Participants
             .FirstOrDefault(p => p.Id == participantId && p.RaceId == raceId);
         
             // check if there are participants in race
-            if (raceAndParticipant is not null)
+            if (raceAndParticipant is not null && race?.StartRace is null)
             {
                 _ctx.Participants.Remove(raceAndParticipant);
                 _ctx.SaveChanges();

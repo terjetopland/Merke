@@ -81,7 +81,7 @@
                                 <!-- Thanks to Ådne-Sigurd Leirdal I got the right format-->
                                 <td>@participant.Result.GetValueOrDefault().ToString(@"hh\:mm\:ss")</td>
                             }      
-                            <!-- Remember to have a check if the race has startet... than you dont want to delete the participant-->
+                            
                             <td><button @onclick="() => DeleteParticipant(participant.Id, _currentRaceId)" class="btn btn-info">Delete participant</button></td>
                         </tr>
                     }

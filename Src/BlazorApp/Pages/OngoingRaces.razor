@@ -72,6 +72,7 @@
                     {
                         <button @onclick="() => EndRace(_race.Id)" class="btn btn-dark">End Race</button>
                     }
+                    <div>@_elapsedTime.ToString(@"hh\:mm\:ss\:ff")</div>
                 }
             }
         </div>
@@ -86,6 +87,7 @@
     private Race _race = new();
     private int _currentRaceId;
     private bool _raceSwitchOn;
+    private TimeSpan _elapsedTime;
 
     protected override void OnInitialized()
     {
@@ -100,6 +102,7 @@
         _race = GetRace(_currentRaceId);
         _participants = ParticipantService.GetParticipants(race.Id);
         ViewRaceHeading(previousRaceId);
+        _elapsedTime = ElapsedTIme(_currentRaceId);
     }
     
     private void ViewRaceHeading(int prevRaceId)
@@ -128,4 +131,11 @@
         var race = RaceService.GetRace(raceId);
         return race;
     }
+
+    private TimeSpan ElapsedTIme(int raceId)
+    {
+        var elapsedTime = RaceService.GetElapsedTime(raceId);
+        return elapsedTime;
+    }
 }
+    

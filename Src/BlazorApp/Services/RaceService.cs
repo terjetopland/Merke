@@ -10,6 +10,7 @@ public interface IRaceService
 {
     void StartRace(int raceId);
     void EndRace(int raceId);
+    TimeSpan GetElapsedTime(int raceId);
     Race GetRace();
 
     Race GetRace(int raceId);
@@ -68,6 +69,17 @@ public class RaceService : IRaceService
             }
             
         }
+    }
+
+    public TimeSpan GetElapsedTime(int raceId)
+    {
+        var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
+
+        if (race?.StartRace == null) return DateTime.UtcNow - DateTime.UtcNow;
+        
+        var elapsedTime = DateTime.UtcNow - race.StartRace;
+        return (TimeSpan)elapsedTime;
+
     }
 
     public Race GetRace()

@@ -101,7 +101,7 @@
             }
 
             <button @onclick="GetUsers" class="btn btn-primary">Users not in race</button>
-            @if (_usersSwitchOn)
+            @if (_usersSwitchOn && GetRace(_currentRaceId).StartRace is null)
             {
                 <h3>All users</h3>
                 <table class="table table-bordered table-responsive">

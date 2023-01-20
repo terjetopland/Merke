@@ -1,9 +1,7 @@
-using System.Net;
 using BlazorApp.Data;
 using BlazorApp.Dtos;
 using BlazorApp.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Services;

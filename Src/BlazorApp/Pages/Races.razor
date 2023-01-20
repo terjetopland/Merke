@@ -37,24 +37,24 @@
                             <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">
                                 @if (race.StartRace is not null)
                                 {
-                                    <div>View result</div> 
+                                    <div>View result</div>
                                 }
                                 else
                                 {
-                                    <div>View Participants</div> 
+                                    <div>View Participants</div>
                                 }
                             </button>
                         </td>
-                        <td>   
-                             @if (race.StartRace is null)
-                             {
-                                 <button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button>
-                             }   
-                             @if (race.EndRace is null && race.StartRace is not null)
-                             {
-                                 <button @onclick="() => EndRace(race.Id)" class="btn btn-dark">End Race</button>
-                             }
-                        </td> 
+                        <td>
+                            @if (race.StartRace is null)
+                            {
+                                <button @onclick="() => StartRace(race.Id)" class="btn btn-primary">Start Race</button>
+                            }
+                            @if (race.EndRace is null && race.StartRace is not null)
+                            {
+                                <button @onclick="() => EndRace(race.Id)" class="btn btn-dark">End Race</button>
+                            }
+                        </td>
                         <td>
                             <button @onclick="() => DeleteRace(race.Id)" class="btn btn-danger">Delete</button>
                         </td>
@@ -63,7 +63,7 @@
                 </tbody>
             </table>
         </div>
-       
+
         @* users *@
         <div class="col-md-5">
             @if (_raceSwitchOn)
@@ -89,9 +89,11 @@
                             {
                                 <!-- Thanks to Ådne-Sigurd Leirdal I got the right format-->
                                 <td>@participant.Result.GetValueOrDefault().ToString(@"hh\:mm\:ss")</td>
-                            }      
-                            
-                            <td><button @onclick="() => DeleteParticipant(participant.Id, _currentRaceId)" class="btn btn-info">Delete participant</button></td>
+                            }
+
+                            <td>
+                                <button @onclick="() => DeleteParticipant(participant.Id, _currentRaceId)" class="btn btn-info">Delete participant</button>
+                            </td>
                         </tr>
                     }
                     </tbody>
@@ -115,7 +117,7 @@
                     @foreach (var user in _users)
                     {
                         UserIsParticipantInRace(user.Id, _currentRaceId);
-                        
+
                         <tr>
                             <td>@(string.IsNullOrWhiteSpace(user.Name) ? "<No name>" : user.Name)</td>
                             <td>@user.Email</td>
@@ -124,16 +126,16 @@
                             {
                                 <td>
                                     <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add to race @_currentRaceId</button>
-                                </td> 
+                                </td>
                             }
-                            
+
                         </tr>
                     }
                     </tbody>
                 </table>
             }
         </div>
-        
+
     </div>
 </div>
 
@@ -150,8 +152,6 @@
     protected override void OnInitialized() // OnInitialized: what should happen when the component is initialized
     {
         FetchRaces();
-    //var race = RaceService.GetRace();
-    //_participants = Service.GetParticipants(race.Id);
     }
 
     private void FetchRaces()
@@ -190,11 +190,11 @@
         _participants = Service.GetParticipants(race.Id);
         ViewRaceHeading(previousRaceId);
     }
+
     private void UpdateResult(int raceId)
     {
         var race = RaceService.GetRace(raceId);
         _participants = Service.GetParticipants(race.Id);
-        
     }
 
     private void GetUsers()
@@ -229,17 +229,9 @@
     {
         var currentParticipants = Service.GetParticipantUsersInRace(raceId);
 
-        var userIsParticipant =  currentParticipants.FirstOrDefault(u => u.User?.Id == userId);
+        var userIsParticipant = currentParticipants.FirstOrDefault(u => u.User?.Id == userId);
 
-        if (userIsParticipant is not null)
-        {
-            _userIsParticipant = true;
-        }
-        else
-        {
-            _userIsParticipant = false;
-        }
-        
+        _userIsParticipant = userIsParticipant is not null;
     }
     }
 

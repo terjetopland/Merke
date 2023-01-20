@@ -1,7 +1,6 @@
 using BlazorApp.Data;
 using BlazorApp.Dtos;
 using BlazorApp.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Services;
@@ -18,38 +17,30 @@ public interface IParticipantService
 public class ParticipantService : IParticipantService
 {
     private readonly AppDbContext _ctx;
-    private UserManager<AppUser> _userManager;
 
-    public ParticipantService(AppDbContext ctx, UserManager<AppUser> userManager)
+    public ParticipantService(AppDbContext ctx)
     {
         _ctx = ctx;
-        _userManager = userManager;
     }
     
     public void AddParticipant(string userId, int raceId)
     {
+        if (raceId == 0) return;
+        
         var userNotParticipantYet =
             _ctx.Participants
                 .Include(p => p.User)
                 .FirstOrDefault(p => p.RaceId == raceId && p.User!.Id == userId);
 
-        if (userNotParticipantYet is null)
+        if (userNotParticipantYet is not null) return;
+
+        var participant = new Participant
         {
-
-            if (raceId != 0)
-            {
-                var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-
-                var participant = new Participant
-                {
-                    User = user,
-                    RaceId = raceId
-                };
-                _ctx.Participants.Add(participant);
-                _ctx.SaveChanges();
-            }
-
-        }
+            UserId = userId,
+            RaceId = raceId
+        };
+        _ctx.Participants.Add(participant);
+        _ctx.SaveChanges();
     }
 
     public void DeleteParticipant(int participantId, int raceId)
@@ -68,7 +59,6 @@ public class ParticipantService : IParticipantService
             }
 
             if (raceAndParticipant is null) throw new Exception("Cannot delete participant");
-
     }
 
     public async Task SetEndTime(int participantId, int raceId)
@@ -99,28 +89,21 @@ public class ParticipantService : IParticipantService
 
         var participantsDto = new List<ParticipantDto>();
 
-        if (race is not null)
+        if (race is null) return participantsDto;
+
+        participantsDto.AddRange(race.Participants.Select(participant => new ParticipantDto
         {
-            foreach (Participant participant in race.Participants)
-            {
+            Id = participant.Id,
+            RaceId = participant.RaceId,
+            EndTime = participant.EndTime,
+            Name = participant.User?.Name ?? "<unknown>",
+            Result = participant.EndTime - race.StartRace
+        }));
 
-                participantsDto.Add(new ParticipantDto
-                {
-                    Id = participant.Id,
-                    RaceId = participant.RaceId,
-                    EndTime = participant.EndTime,
-                    Name = participant.User?.Name ?? "<unknown>",
-                    Result = participant.EndTime - race.StartRace
-                    
-
-                });
-            }
-
-            participantsDto.Sort((participant1, participant2) =>
-                TimeSpan.Compare(
-                    participant1.Result ?? new TimeSpan(0),
-                    participant2.Result ?? new TimeSpan(0)));
-        }
+        participantsDto.Sort((participant1, participant2) =>
+            TimeSpan.Compare(
+                participant1.Result ?? new TimeSpan(0),
+                participant2.Result ?? new TimeSpan(0)));
 
 
         return participantsDto;
@@ -130,11 +113,10 @@ public class ParticipantService : IParticipantService
     //VillereV maybe you have a better solution for this.
     public List<Participant> GetParticipantUsersInRace( int raceId)
     {
-        List<Participant> usersInRace = _ctx.Participants
+        var usersInRace = _ctx.Participants
             .Include(p => p.User)
             .Where(p=> p.RaceId == raceId)
             .ToList();
-        
 
         return usersInRace;
     }

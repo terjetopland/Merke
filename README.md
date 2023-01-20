@@ -8,3 +8,6 @@ You can take the test for 40 years, and it is therefore important that the resul
 Until now, I have recorded this manually with a stopwatch, pen and paper and later punched it into Excel to keep track.
 It eventually became a lot to keep track of, and it was then the idea to create an app where I could do all this, 
 and at the same time ensure that the data would be taken care of for all the years to come.
+
+# Status
+[![BlazorApp.CI](https://github.com/terjetopland/Merke/actions/workflows/dotnet.yml/badge.svg)](https://github.com/terjetopland/Merke/actions/workflows/dotnet.yml)

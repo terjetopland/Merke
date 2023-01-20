@@ -3,6 +3,8 @@
 @using BlazorApp.Services
 @using BlazorApp.Models
 @using BlazorApp.Dtos
+@using BlazorApp.Components
+@using Microsoft.DotNet.Scaffolding.Shared.Messaging
 
 @inject IParticipantService Service
 @inject IRaceService RaceService
@@ -56,13 +58,23 @@
                             }
                         </td>
                         <td>
-                            <button @onclick="() => DeleteRace(race.Id)" class="btn btn-danger">Delete</button>
+                            <button @onclick="() => OpenDialog(race.Id, race.Name)" class="btn btn-danger">Delete</button>
+                            @if (_dialogIsOpen)
+                                {
+                                    <Dialog Caption="Delete race"
+                                            Message="@_message"
+                                            OnClose="@OnDialogClose"
+                                            Type="Category.DeleteNot">
+                                        
+                                    </Dialog>
+                                }
                         </td>
                     </tr>
                 }
                 </tbody>
             </table>
         </div>
+        
 
         @* users *@
         <div class="col-md-5">
@@ -141,6 +153,30 @@
     private int _currentRaceId;
     private bool _usersSwitchOn;
     private bool _raceSwitchOn;
+    
+    // dialog checker
+    private bool _dialogIsOpen = false;
+    private string _message;
+
+    private void OpenDialog(int raceId, string title)
+    {
+        _dialogIsOpen = true;
+        _currentRaceId = raceId;
+        _message = "Do you want to delete the race \"" + title + "\"?";
+    }
+
+    private Task OnDialogClose(bool isOk)
+    {
+        if (isOk)
+        {
+            DeleteRace(_currentRaceId);
+        }
+        _dialogIsOpen = false;
+        return Task.CompletedTask;
+    }
+    
+    
+    
     private List<AppUser> UsersNotInRace() 
     {
         var users = _users.Where(x => _participants.All(p => p.UserId != x.Id)).ToList();

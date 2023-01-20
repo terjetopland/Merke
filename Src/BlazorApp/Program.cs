@@ -4,6 +4,7 @@ using BlazorApp.Areas.Identity;
 using BlazorApp.Data;
 using BlazorApp.Models;
 using BlazorApp.Services;
+using BlazorApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

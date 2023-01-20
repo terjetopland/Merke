@@ -34,7 +34,16 @@
                         <td>@race.Name</td>
                         <td>@race.StartRace</td>
                         <td>
-                            <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">View result</button>
+                            <button @onclick="() => ViewResult(race.Id)" class="btn btn-primary">
+                                @if (race.StartRace is not null)
+                                {
+                                    <div>View result</div> 
+                                }
+                                else
+                                {
+                                    <div>View Participants</div> 
+                                }
+                            </button>
                         </td>
                         <td>   
                              @if (race.StartRace is null)
@@ -170,6 +179,7 @@
     private void EndRace(int raceId)
     {
         RaceService.EndRace(raceId);
+        UpdateResult(raceId);
     }
 
     private void ViewResult(int raceId)

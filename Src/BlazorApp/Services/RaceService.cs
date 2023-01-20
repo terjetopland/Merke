@@ -51,7 +51,7 @@ public class RaceService : IRaceService
             .Where(p => p.RaceId == raceId)
             .ToList();
         
-        DateTime endTime = DateTime.UtcNow;
+        var endTime = DateTime.UtcNow;
         var race = _ctx.Races.FirstOrDefault(r => r.Id == raceId);
         if (race is not null && race.StartRace is not null)
         {
@@ -62,12 +62,11 @@ public class RaceService : IRaceService
         //Set maxvalue to all participants that has not ended race before the race ends
         foreach (var participantNotEnded in participantsNotEndedRace)
         {
-            if (!participantNotEnded.EndTime.HasValue)
-            {
-                participantNotEnded.EndTime = DateTime.MaxValue;
-                _ctx.SaveChanges();
-            }
+            if (participantNotEnded.EndTime.HasValue) continue;
             
+            participantNotEnded.EndTime = DateTime.MaxValue;
+            _ctx.SaveChanges();
+
         }
     }
 

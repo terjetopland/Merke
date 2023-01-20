@@ -122,7 +122,7 @@
                             <td>@(string.IsNullOrWhiteSpace(user.Name) ? "<No name>" : user.Name)</td>
                             <td>@user.Email</td>
                             <td>@(user.DateOfBirth is null ? "<Not set>" : user.DateOfBirth)</td>
-                            @if (_currentRaceId != 0 && !_userIsParticipant)
+                            @if (_currentRaceId != 0 && !_userIsParticipant && GetRace(_currentRaceId).StartRace is null)
                             {
                                 <td>
                                     <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add to race @_currentRaceId</button>
@@ -180,6 +180,12 @@
     {
         RaceService.EndRace(raceId);
         UpdateResult(raceId);
+    }
+
+    private Race GetRace(int raceId)
+    {
+        var race = RaceService.GetRace(raceId);
+        return race;
     }
 
     private void ViewResult(int raceId)

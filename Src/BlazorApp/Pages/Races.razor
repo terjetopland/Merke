@@ -100,7 +100,7 @@
                 </table>
             }
 
-            <button @onclick="GetUsers" class="btn btn-primary">Show all users</button>
+            <button @onclick="GetUsers" class="btn btn-primary">Users not in race</button>
             @if (_usersSwitchOn)
             {
                 <h3>All users</h3>
@@ -114,21 +114,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var user in _users)
+                    @foreach (var user in UsersNotInRace())
                     {
-                        UserIsParticipantInRace(user.Id, _currentRaceId);
-
                         <tr>
                             <td>@(string.IsNullOrWhiteSpace(user.Name) ? "<No name>" : user.Name)</td>
                             <td>@user.Email</td>
                             <td>@(user.DateOfBirth is null ? "<Not set>" : user.DateOfBirth)</td>
-                            @if (_currentRaceId != 0 && !_userIsParticipant && GetRace(_currentRaceId).StartRace is null)
-                            {
-                                <td>
-                                    <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add to race @_currentRaceId</button>
-                                </td>
-                            }
-
+                            <td>
+                                <button @onclick="() => SetParticipant(user.Id)" class="btn btn-primary">Add to race @_currentRaceId</button>
+                            </td>
                         </tr>
                     }
                     </tbody>
@@ -147,7 +141,11 @@
     private int _currentRaceId;
     private bool _usersSwitchOn;
     private bool _raceSwitchOn;
-    private bool _userIsParticipant;
+    private List<AppUser> UsersNotInRace() 
+    {
+        var users = _users.Where(x => _participants.All(p => p.UserId != x.Id)).ToList();
+        return users;
+    }
 
     protected override void OnInitialized() // OnInitialized: what should happen when the component is initialized
     {
@@ -230,15 +228,6 @@
         else
             _raceSwitchOn = true;
     }
-    
-    private void UserIsParticipantInRace(string userId, int raceId)
-    {
-        var currentParticipants = Service.GetParticipantUsersInRace(raceId);
 
-        var userIsParticipant = currentParticipants.FirstOrDefault(u => u.User?.Id == userId);
-
-        _userIsParticipant = userIsParticipant is not null;
-    }
-    
     }
 

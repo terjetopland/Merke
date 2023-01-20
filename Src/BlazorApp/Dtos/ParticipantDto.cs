@@ -6,6 +6,7 @@ public class ParticipantDto
 {
     public int Id { get; set; }
     public int RaceId { get; set; }
+    public string? UserId { get; set; }
     
     public DateTime? EndTime { get; set; }
     public string Name { get; set; } = default!;

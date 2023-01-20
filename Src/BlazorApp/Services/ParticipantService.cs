@@ -11,7 +11,6 @@ public interface IParticipantService
     void DeleteParticipant(int participantId, int raceId);
     Task SetEndTime(int participantId, int raceId);
     List<ParticipantDto> GetParticipants(int raceId);
-    List<Participant> GetParticipantUsersInRace( int raceId);
 }
 
 public class ParticipantService : IParticipantService
@@ -94,6 +93,7 @@ public class ParticipantService : IParticipantService
         participantsDto.AddRange(race.Participants.Select(participant => new ParticipantDto
         {
             Id = participant.Id,
+            UserId = participant.UserId,
             RaceId = participant.RaceId,
             EndTime = participant.EndTime,
             Name = participant.User?.Name ?? "<unknown>",
@@ -107,18 +107,6 @@ public class ParticipantService : IParticipantService
 
 
         return participantsDto;
-    }
-    
-    //This is maybe not DRY, but now I figured out how to get currentParticipant and hide button 'Add' if user was already participant
-    //VillereV maybe you have a better solution for this.
-    public List<Participant> GetParticipantUsersInRace( int raceId)
-    {
-        var usersInRace = _ctx.Participants
-            .Include(p => p.User)
-            .Where(p=> p.RaceId == raceId)
-            .ToList();
-
-        return usersInRace;
     }
     
 }

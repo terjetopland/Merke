@@ -62,7 +62,7 @@ public class ParticipantServiceTests
             // assert
             Assert.NotNull(result);
             Assert.Equal(3, result.Count);
-            Assert.Equal(particpantDtos.Select(x => new { x.Id, x.RaceId, x.Result}), result.Select(x => new { x.Id, x.RaceId, x.Result }));
+            Assert.Equal(particpantDtos.Select(x => new { x.Id, x.RaceId, x.EndTime}), result.Select(x => new { x.Id, x.RaceId, x.EndTime }));
         }
     }
 }

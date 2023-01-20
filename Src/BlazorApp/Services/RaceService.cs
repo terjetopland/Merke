@@ -134,7 +134,7 @@ public class RaceService : IRaceService
 
     public void Delete(int raceId)
     {
-        var raceAndParticipants = _ctx.Races
+        var raceAndParticipants = _ctx.Races 
             .Include(r => r.Participants)
             .FirstOrDefault(r => r.Id == raceId);
         

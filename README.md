@@ -1,6 +1,6 @@
 # Merke
 
-As a coach for the ski group, I have for the past 11 years arranged ski tests for everyone in the ski group. 
+As a coach for the ski group since 2009, I have arranged ski tests for everyone in the ski group. 
 In order to pass the ski test each year, each participant in each age group must meet given official requirements.
 If the participant passes the requirement, the person concerned will receive a prize after a certain number of years of passing. 
 You can take the test for 40 years, and it is therefore important that the results are taken care of.

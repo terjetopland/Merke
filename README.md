@@ -9,5 +9,12 @@ Until now, I have recorded this manually with a stopwatch, pen and paper and lat
 It eventually became a lot to keep track of, and it was then the idea to create an app where I could do all this, 
 and at the same time ensure that the data would be taken care of for all the years to come.
 
+
+The project has taken a back seat in recent months as I've been focusing on my studies. 
+When I continues the project - I will probably learn Java and use this for backend and React.JS Typescript for frontend.
+The reson for changing language to Java is that I really want to learn this and it offers crossplattform functionallity.
+This will be a new project called Merke2.
+
+
 # Status
 [![BlazorApp.CI](https://github.com/terjetopland/Merke/actions/workflows/dotnet.yml/badge.svg)](https://github.com/terjetopland/Merke/actions/workflows/dotnet.yml)

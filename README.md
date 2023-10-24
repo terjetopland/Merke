@@ -11,9 +11,7 @@ and at the same time ensure that the data would be taken care of for all the yea
 
 
 The project has taken a back seat in recent months as I've been focusing on my studies. 
-When I continues the project - I will probably learn Java and use this for backend and React.JS Typescript for frontend.
-The reson for changing language to Java is that I want to learn this language and its benefits.
-This will be a new project called Merke2.
+When I continues the project - I will probably take a step back and do over some of the things.
 
 
 # Status
